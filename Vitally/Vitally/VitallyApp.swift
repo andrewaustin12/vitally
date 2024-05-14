@@ -22,11 +22,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct VitallyApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var authVM = AuthViewModel()
+    @StateObject var historyVM = HistoryViewModel()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authVM)
+                .environmentObject(historyVM)
         }
     }
 }

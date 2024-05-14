@@ -13,9 +13,12 @@ struct ScannerView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             // Placeholder for the scanner area
+            
             Rectangle()
                 .fill(Color.gray.opacity(0.1)) // This simulates the scanner area
                 .edgesIgnoringSafeArea(.all)
+            
+            
             
             // Flashlight icon with dynamic background in a circle
             Image(systemName: isFlashlightOn ? "flashlight.on.fill" : "flashlight.off.fill")
@@ -29,7 +32,10 @@ struct ScannerView: View {
                     isFlashlightOn.toggle() // Toggle flashlight state on tap
                 }
                 .padding()
+            
+            
         }
+        
     }
 }
 

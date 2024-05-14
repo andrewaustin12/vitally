@@ -37,7 +37,14 @@ struct MainTab: View {
                     Image(systemName: "gear")
                     Text("Settings")
                 }.tag(2)
-            
+            TestView()
+                .onAppear{
+                    selectedIndex = 3
+                }
+                .tabItem{
+                    Image(systemName: "icloud.slash")
+                    Text("Test")
+                }.tag(3)
         }
     }
 }
@@ -45,4 +52,5 @@ struct MainTab: View {
 #Preview {
     MainTab()
         .environmentObject(AuthViewModel())
+        .environmentObject(HistoryViewModel())
 }
