@@ -1,40 +1,27 @@
-import Foundation
+import SwiftUI
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 import SwiftUI
 import FirebaseFirestore
 
 class HistoryViewModel: ObservableObject {
     @Published var products: [Product] = []
-    
+
     private var db = Firestore.firestore()
 
-    func addProduct(_ product: Product) {
-        DispatchQueue.main.async {
-            self.products.insert(product, at: 0)
-            if self.products.count > 20 {
-                self.products.removeLast()
+    func fetchProducts() {
+        db.collection("products")
+            .order(by: "timestamp", descending: true)
+            .limit(to: 20)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                } else {
+                    self.products = querySnapshot?.documents.compactMap { document in
+                        try? document.data(as: Product.self)
+                    } ?? []
+                }
             }
-        }
-    }
-    
-    func addProductByBarcode(_ barcode: String) async {
-        let docRef = db.collection("products").document(barcode)
-        
-        do {
-            let document = try await docRef.getDocument()
-            if let data = document.data(), document.exists {
-                let jsonData = try JSONSerialization.data(withJSONObject: data)
-                let product = try JSONDecoder().decode(Product.self, from: jsonData)
-                self.addProduct(product)
-            } else {
-                print("Product not found in Firestore")
-            }
-        } catch {
-            print("Error fetching document from Firestore: \(error.localizedDescription)")
-        }
-    }
-    
-    func fetchLast20Products() -> [Product] {
-        return Array(products.prefix(20))
     }
 }

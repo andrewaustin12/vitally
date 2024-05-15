@@ -21,17 +21,117 @@ struct Product: Codable, Identifiable {
     let imageURL: String
     let nutriments: Nutriments
     let nutriscoreData: NutriscoreData
+    let ecoscoreGrade: String?
+    let ecoscoreScore: Int?
+    let allergens: String?
     let nutritionGrades, productName, brands: String
+    let timestamp: Date?
 
     enum CodingKeys: String, CodingKey {
         case code
         case imageURL = "image_url"
         case nutriments
         case nutriscoreData = "nutriscore_data"
+        case ecoscoreGrade = "ecoscore_grade"
+        case ecoscoreScore = "ecoscore_score"
+        case allergens = "allergens"
         case nutritionGrades = "nutrition_grades"
         case productName = "product_name"
         case brands = "brands"
+        case timestamp
     }
+    
+    // MARK: Mock Product Nutella
+    static let mockProduct = Product(
+            code: "3017624010701",
+            imageURL: "https://images.openfoodfacts.net/images/products/301/762/401/0701/front_en.54.400.jpg",
+            nutriments: Nutriments(
+                carbohydrates: 57.5,
+                carbohydrates100G: 57.5,
+                carbohydratesUnit: "g",
+                carbohydratesValue: 57.5,
+                energy: 2255,
+                energyKcal: 539,
+                energyKcal100G: 539,
+                energyKcalUnit: "kcal",
+                energyKcalValue: 539,
+                energyKcalValueComputed: 533.3,
+                energy100G: 2255,
+                energyUnit: "kcal",
+                energyValue: 539,
+                fat: 30.9,
+                fat100G: 30.9,
+                fatUnit: "g",
+                fatValue: 30.9,
+                fruitsVegetablesLegumesEstimateFromIngredients100G: 0,
+                fruitsVegetablesLegumesEstimateFromIngredientsServing: 0,
+                fruitsVegetablesNutsEstimateFromIngredients100G: 10.7142857142857,
+                fruitsVegetablesNutsEstimateFromIngredientsServing: 10.7142857142857,
+                novaGroup: 4,
+                novaGroup100G: 4,
+                novaGroupServing: 4,
+                nutritionScoreFr: 26,
+                nutritionScoreFr100G: 26,
+                proteins: 6.3,
+                proteins100G: 6.3,
+                proteinsUnit: "g",
+                proteinsValue: 6.3,
+                salt: 0.1075,
+                salt100G: 0.1075,
+                saltUnit: "g",
+                saltValue: 0.1075,
+                saturatedFat: 10.6,
+                saturatedFat100G: 10.6,
+                saturatedFatUnit: "g",
+                saturatedFatValue: 10.6,
+                sodium: 0.043,
+                sodium100G: 0.043,
+                sodiumUnit: "g",
+                sodiumValue: 0.043,
+                sugars: 56.3,
+                sugars100G: 56.3,
+                sugarsUnit: "g",
+                sugarsValue: 56.3
+            ),
+            nutriscoreData: NutriscoreData(
+                energy: 2255,
+                energyPoints: 6,
+                energyValue: 2255,
+                fiber: 0,
+                fiberPoints: 0,
+                fiberValue: 0,
+                fruitsVegetablesNutsColzaWalnutOliveOils: 10.7142857142857,
+                fruitsVegetablesNutsColzaWalnutOliveOilsPoints: 0,
+                fruitsVegetablesNutsColzaWalnutOliveOilsValue: 10.7,
+                grade: "e",
+                isBeverage: 0,
+                isCheese: 0,
+                isFat: 0,
+                isWater: 0,
+                negativePoints: 26,
+                positivePoints: 0,
+                proteins: 6.3,
+                proteinsPoints: 3,
+                proteinsValue: 6.3,
+                saturatedFat: 10.6,
+                saturatedFatPoints: 10,
+                saturatedFatValue: 10.6,
+                score: 26,
+                sodium: 43,
+                sodiumPoints: 0,
+                sodiumValue: 43,
+                sugars: 56.3,
+                sugarsPoints: 10,
+                sugarsValue: 56.3
+            ),
+            ecoscoreGrade: "d",
+            ecoscoreScore: 33,
+            allergens: "en:nuts",
+            nutritionGrades: "e",
+            productName: "Nutella",
+            brands: "Nutella Ferrero",
+            timestamp: Date()
+        )
 }
 
 // MARK: - Nutriments
@@ -166,3 +266,4 @@ struct NutriscoreData: Codable {
         case sugarsValue = "sugars_value"
     }
 }
+

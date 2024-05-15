@@ -13,19 +13,19 @@ struct TestView: View {
     @EnvironmentObject var historyViewModel: HistoryViewModel  // EnvironmentObject to access history
     @State private var showDetailsSheet = false  // State to control sheet presentation
     
-    let nutella: String = ""
-    let kitkat: String = "034000176120"
+    let nutella: String = "3017624010701"
+    let Coke: String = "5449000000439"
 
     var body: some View {
         VStack {
             Button("Fetch Food Product") {
                 Task {
-                    let barcode = "5449000000439" // Replace this with the scanned barcode
+                    let barcode = Coke // Replace this with the scanned barcode
                     await viewModel.fetchFoodProduct(barcode: barcode)
-                    if let product = viewModel.product {
+                    if viewModel.product != nil {
                         DispatchQueue.main.async {
                             showDetailsSheet = true  // Show the sheet when product data is fetched
-                            historyViewModel.addProduct(product)  // Add product to history
+                            //historyViewModel.addProduct(product)  // Add product to history
                         }
                     }
                 }
@@ -44,6 +44,7 @@ struct TestView: View {
 #Preview {
     TestView()
         .environmentObject(HistoryViewModel())
+        .environmentObject(AuthViewModel())
 }
 
 

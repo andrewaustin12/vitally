@@ -26,7 +26,12 @@ class FoodProductViewModel: ObservableObject {
     
     private func parseProductData(data: [String: Any]) {
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: data)
+            var modifiedData = data
+            if let timestamp = data["timestamp"] as? Timestamp {
+                modifiedData["timestamp"] = timestamp.dateValue().timeIntervalSince1970
+            }
+            
+            let jsonData = try JSONSerialization.data(withJSONObject: modifiedData)
             let product = try JSONDecoder().decode(Product.self, from: jsonData)
             DispatchQueue.main.async {
                 self.product = product
@@ -44,7 +49,10 @@ class FoodProductViewModel: ObservableObject {
                     "nutriscore_data",
                     "nutriments",
                     "nutrition_grades",
-                    "brands"
+                    "brands",
+                    "ecoscore_grade",
+                    "ecoscore_score",
+                    "allergens"
                 ].joined(separator: ",")
         
         let endpoint = "https://world.openfoodfacts.org/api/v2/product/\(barcode)?fields=\(fields)"
@@ -81,11 +89,13 @@ class FoodProductViewModel: ObservableObject {
     private func saveProductToCache(barcode: String, product: Product) async {
         do {
             let data = try JSONEncoder().encode(product)
-            let dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            var dictionary = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            dictionary?["timestamp"] = FieldValue.serverTimestamp()
             try await db.collection("products").document(barcode).setData(dictionary ?? [:])
             print("Saved to Firestore")
         } catch {
             print("Error saving product to cache: \(error.localizedDescription)")
         }
     }
+
 }

@@ -16,6 +16,9 @@
 		3F48F06B2BF0B20A0007EC25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48F06A2BF0B20A0007EC25 /* Preview Assets.xcassets */; };
 		3F9DCBD52BF34EEE00E10205 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBD42BF34EEE00E10205 /* HistoryViewModel.swift */; };
 		3F9DCBD72BF39F7200E10205 /* ProductDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */; };
+		3F9DCBDA2BF4C18F00E10205 /* NovaBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */; };
+		3F9DCBDD2BF4F40600E10205 /* NutrientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */; };
+		3F9DCBDF2BF4F79B00E10205 /* ScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBDE2BF4F79B00E10205 /* ScannerSheetView.swift */; };
 		3FEA9B102BF13F08009598CA /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B092BF13F08009598CA /* AuthViewModel.swift */; };
 		3FEA9B112BF13F08009598CA /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B0B2BF13F08009598CA /* ForgotPasswordView.swift */; };
 		3FEA9B122BF13F08009598CA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B0C2BF13F08009598CA /* LoginView.swift */; };
@@ -46,6 +49,9 @@
 		3F48F06A2BF0B20A0007EC25 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3F9DCBD42BF34EEE00E10205 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsView.swift; sourceTree = "<group>"; };
+		3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaBadgeView.swift; sourceTree = "<group>"; };
+		3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientView.swift; sourceTree = "<group>"; };
+		3F9DCBDE2BF4F79B00E10205 /* ScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSheetView.swift; sourceTree = "<group>"; };
 		3FEA9B092BF13F08009598CA /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		3FEA9B0B2BF13F08009598CA /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		3FEA9B0C2BF13F08009598CA /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -130,7 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				3FEA9B382BF2089D009598CA /* ScannerView.swift */,
-				3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */,
+				3F9DCBDE2BF4F79B00E10205 /* ScannerSheetView.swift */,
 			);
 			path = Scanner;
 			sourceTree = "<group>";
@@ -139,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				3FEA9B3B2BF209BD009598CA /* HistoryView.swift */,
+				3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -205,6 +212,8 @@
 				3FEA9B282BF14117009598CA /* InputView.swift */,
 				3F13AADB2BF2BA8600CB4945 /* ImageLoaderView.swift */,
 				3F13AADD2BF2BC4B00CB4945 /* Constants.swift */,
+				3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */,
+				3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -325,11 +334,14 @@
 				3FEA9B372BF14BB9009598CA /* SettingsRowView.swift in Sources */,
 				3FEA9B122BF13F08009598CA /* LoginView.swift in Sources */,
 				3FEA9B392BF2089D009598CA /* ScannerView.swift in Sources */,
+				3F9DCBDD2BF4F40600E10205 /* NutrientView.swift in Sources */,
+				3F9DCBDA2BF4C18F00E10205 /* NovaBadgeView.swift in Sources */,
 				3FEA9B102BF13F08009598CA /* AuthViewModel.swift in Sources */,
 				3FEA9B332BF14B22009598CA /* SettingsView.swift in Sources */,
 				3F13AADC2BF2BA8600CB4945 /* ImageLoaderView.swift in Sources */,
 				3FEA9B3F2BF21387009598CA /* Product.swift in Sources */,
 				3F13AADE2BF2BC4B00CB4945 /* Constants.swift in Sources */,
+				3F9DCBDF2BF4F79B00E10205 /* ScannerSheetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,32 +8,30 @@ struct HistoryView: View {
     
     var body: some View {
         NavigationStack {
-            List(historyViewModel.fetchLast20Products()) { product in
+            List(historyViewModel.products) { product in
                 NavigationLink(destination: ProductDetailsView(product: product)) {
                     HStack {
-                        
-                            ImageLoaderView(urlString: product.imageURL)
-                                .frame(width: imageSize, height: imageSize)
-                                .cornerRadius(8)
-                            VStack(alignment: .leading) {
-                                Text(product.productName)
-                                    .font(.headline)
-                                Text(product.brands)
-                                    .font(.subheadline)
-                                Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
-                                    .font(.callout)
-                            }
-                        
-                        
-                        
+                        ImageLoaderView(urlString: product.imageURL)
+                            .frame(width: imageSize, height: imageSize)
+                            .cornerRadius(8)
+                        VStack(alignment: .leading) {
+                            Text(product.productName)
+                                .font(.headline)
+                            Text(product.brands)
+                                .font(.subheadline)
+                            Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
+                                .font(.callout)
+                        }
                     }
                 }
             }
             .navigationTitle("History")
+            .onAppear {
+                historyViewModel.fetchProducts()
+            }
         }
     }
 }
-
 
 #Preview {
     NavigationStack {
