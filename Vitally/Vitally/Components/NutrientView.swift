@@ -18,7 +18,7 @@ struct NutrientView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 24, height: 24)
-                .foregroundColor(.blue)
+                .foregroundColor(.teal)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(name)

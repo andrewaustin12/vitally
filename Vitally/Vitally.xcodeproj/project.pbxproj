@@ -14,11 +14,17 @@
 		3F48F0662BF0B2090007EC25 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F48F0652BF0B2090007EC25 /* ContentView.swift */; };
 		3F48F0682BF0B20A0007EC25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48F0672BF0B20A0007EC25 /* Assets.xcassets */; };
 		3F48F06B2BF0B20A0007EC25 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F48F06A2BF0B20A0007EC25 /* Preview Assets.xcassets */; };
+		3F710F7F2BF66B71005E689C /* Onboarding1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F710F7E2BF66B71005E689C /* Onboarding1View.swift */; };
+		3F710F812BF66F65005E689C /* OnboardingTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F710F802BF66F65005E689C /* OnboardingTabView.swift */; };
+		3F710F832BF67685005E689C /* OnboardingFinalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F710F822BF67685005E689C /* OnboardingFinalView.swift */; };
 		3F9DCBD52BF34EEE00E10205 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBD42BF34EEE00E10205 /* HistoryViewModel.swift */; };
 		3F9DCBD72BF39F7200E10205 /* ProductDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */; };
 		3F9DCBDA2BF4C18F00E10205 /* NovaBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */; };
 		3F9DCBDD2BF4F40600E10205 /* NutrientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */; };
 		3F9DCBDF2BF4F79B00E10205 /* ScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBDE2BF4F79B00E10205 /* ScannerSheetView.swift */; };
+		3F9DCBE22BF56C3600E10205 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE12BF56C3600E10205 /* SearchView.swift */; };
+		3F9DCBE42BF56E1700E10205 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */; };
+		3F9DCBE62BF56EC000E10205 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE52BF56EC000E10205 /* Search.swift */; };
 		3FEA9B102BF13F08009598CA /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B092BF13F08009598CA /* AuthViewModel.swift */; };
 		3FEA9B112BF13F08009598CA /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B0B2BF13F08009598CA /* ForgotPasswordView.swift */; };
 		3FEA9B122BF13F08009598CA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B0C2BF13F08009598CA /* LoginView.swift */; };
@@ -47,11 +53,17 @@
 		3F48F0652BF0B2090007EC25 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F48F0672BF0B20A0007EC25 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F48F06A2BF0B20A0007EC25 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3F710F7E2BF66B71005E689C /* Onboarding1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding1View.swift; sourceTree = "<group>"; };
+		3F710F802BF66F65005E689C /* OnboardingTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTabView.swift; sourceTree = "<group>"; };
+		3F710F822BF67685005E689C /* OnboardingFinalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFinalView.swift; sourceTree = "<group>"; };
 		3F9DCBD42BF34EEE00E10205 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsView.swift; sourceTree = "<group>"; };
 		3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaBadgeView.swift; sourceTree = "<group>"; };
 		3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientView.swift; sourceTree = "<group>"; };
 		3F9DCBDE2BF4F79B00E10205 /* ScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSheetView.swift; sourceTree = "<group>"; };
+		3F9DCBE12BF56C3600E10205 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		3F9DCBE52BF56EC000E10205 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		3FEA9B092BF13F08009598CA /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		3FEA9B0B2BF13F08009598CA /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		3FEA9B0C2BF13F08009598CA /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -124,6 +136,16 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		3F710F7D2BF66AFF005E689C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				3F710F7E2BF66B71005E689C /* Onboarding1View.swift */,
+				3F710F822BF67685005E689C /* OnboardingFinalView.swift */,
+				3F710F802BF66F65005E689C /* OnboardingTabView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		3F9DCBD12BF34E1700E10205 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +170,14 @@
 				3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */,
 			);
 			path = History;
+			sourceTree = "<group>";
+		};
+		3F9DCBE02BF56C2800E10205 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				3F9DCBE12BF56C3600E10205 /* SearchView.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		3FEA9B0A2BF13F08009598CA /* ViewModel */ = {
@@ -183,6 +213,7 @@
 			children = (
 				3FEA9B212BF13FF3009598CA /* User.swift */,
 				3FEA9B3E2BF21387009598CA /* Product.swift */,
+				3F9DCBE52BF56EC000E10205 /* Search.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -221,6 +252,8 @@
 		3FEA9B3A2BF20999009598CA /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				3F710F7D2BF66AFF005E689C /* Onboarding */,
+				3F9DCBE02BF56C2800E10205 /* Search */,
 				3F9DCBD32BF34E2A00E10205 /* History */,
 				3F9DCBD22BF34E1F00E10205 /* Scanner */,
 				3F9DCBD12BF34E1700E10205 /* Settings */,
@@ -234,6 +267,7 @@
 			children = (
 				3FEA9B432BF21BF4009598CA /* FoodProductViewModel.swift */,
 				3F9DCBD42BF34EEE00E10205 /* HistoryViewModel.swift */,
+				3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -323,14 +357,18 @@
 				3F48F0642BF0B2090007EC25 /* VitallyApp.swift in Sources */,
 				3FEA9B112BF13F08009598CA /* ForgotPasswordView.swift in Sources */,
 				3FEA9B222BF13FF3009598CA /* User.swift in Sources */,
+				3F9DCBE22BF56C3600E10205 /* SearchView.swift in Sources */,
 				3FEA9B3C2BF209BD009598CA /* HistoryView.swift in Sources */,
 				3F9DCBD52BF34EEE00E10205 /* HistoryViewModel.swift in Sources */,
 				3FEA9B2D2BF14488009598CA /* MainTab.swift in Sources */,
 				3FEA9B442BF21BF4009598CA /* FoodProductViewModel.swift in Sources */,
 				3FEA9B412BF21828009598CA /* TestView.swift in Sources */,
 				3F9DCBD72BF39F7200E10205 /* ProductDetailsView.swift in Sources */,
+				3F710F832BF67685005E689C /* OnboardingFinalView.swift in Sources */,
+				3F710F812BF66F65005E689C /* OnboardingTabView.swift in Sources */,
 				3FEA9B132BF13F08009598CA /* RegistrationView.swift in Sources */,
 				3FEA9B292BF14117009598CA /* InputView.swift in Sources */,
+				3F9DCBE62BF56EC000E10205 /* Search.swift in Sources */,
 				3FEA9B372BF14BB9009598CA /* SettingsRowView.swift in Sources */,
 				3FEA9B122BF13F08009598CA /* LoginView.swift in Sources */,
 				3FEA9B392BF2089D009598CA /* ScannerView.swift in Sources */,
@@ -339,6 +377,8 @@
 				3FEA9B102BF13F08009598CA /* AuthViewModel.swift in Sources */,
 				3FEA9B332BF14B22009598CA /* SettingsView.swift in Sources */,
 				3F13AADC2BF2BA8600CB4945 /* ImageLoaderView.swift in Sources */,
+				3F9DCBE42BF56E1700E10205 /* SearchViewModel.swift in Sources */,
+				3F710F7F2BF66B71005E689C /* Onboarding1View.swift in Sources */,
 				3FEA9B3F2BF21387009598CA /* Product.swift in Sources */,
 				3F13AADE2BF2BC4B00CB4945 /* Constants.swift in Sources */,
 				3F9DCBDF2BF4F79B00E10205 /* ScannerSheetView.swift in Sources */,

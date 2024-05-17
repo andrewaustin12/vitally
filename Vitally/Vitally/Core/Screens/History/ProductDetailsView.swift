@@ -88,6 +88,7 @@ struct ProductDetailsView: View {
                             .foregroundColor(.gray)
                     }
                     Spacer()
+                    
                     Image(nutriScoreImageName(for: product.nutritionGrades))
                         .resizable()
                         .scaledToFit()
@@ -115,15 +116,15 @@ struct ProductDetailsView: View {
             
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text("Eco-Score: \(product.ecoscoreGrade?.capitalized ?? "N/A")")
+                    Text("Eco-Score: \(product.ecoscoreGrade?.capitalized ?? "None Available")")
                         .font(.title3)
                         .fontWeight(.bold)
-                    Text(ecoScoreDescription(for: product.nutriments.novaGroup))
+                    Text(ecoScoreDescription(for: product.ecoscoreGrade))
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
                 Spacer()
-                Image(ecoScoreImageName(for: product.nutriments.novaGroup))
+                Image(ecoScoreImageName(for: product.ecoscoreGrade))
                     .resizable()
                     .scaledToFit()
                     .frame(height: 55)
@@ -250,35 +251,46 @@ struct ProductDetailsView: View {
         }
     }
     
-    private func ecoScoreImageName(for group: Int) -> String {
-        switch group {
-        case 1:
+    private func ecoScoreImageName(for grade: String?) -> String {
+        guard let grade = grade?.lowercased() else {
+            return "eco-grade-unknown"
+        }
+        switch grade {
+        case "a":
             return "eco-grade-a"
-        case 2:
+        case "b":
             return "eco-grade-b"
-        case 3:
+        case "c":
             return "eco-grade-c"
-        case 4:
+        case "d":
             return "eco-grade-d"
+        case "e":
+            return "eco-grade-e"
         default:
             return "eco-grade-unknown"
         }
     }
-    
-    private func ecoScoreDescription(for group: Int) -> String {
-        switch group {
-        case 1:
+
+    private func ecoScoreDescription(for grade: String?) -> String {
+        guard let grade = grade?.lowercased() else {
+            return "Not Available"
+        }
+        switch grade {
+        case "a":
             return "Very low environmental impact"
-        case 2:
+        case "b":
             return "Low environmental impact"
-        case 3:
+        case "c":
             return "Moderate environmental impact"
-        case 4:
+        case "d":
             return "High environmental impact"
-        default:
+        case "e":
             return "Very high environmental impact"
+        default:
+            return "None Available"
         }
     }
+
     
     private var formattedAllergens: String {
         guard let allergens = product.allergens else {

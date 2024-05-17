@@ -29,22 +29,30 @@ struct MainTab: View {
                     Image(systemName: "barcode.viewfinder")
                     Text("Scan")
                 }.tag(1)
-            SettingsView()
+            TestView()
                 .onAppear{
                     selectedIndex = 2
                 }
                 .tabItem{
-                    Image(systemName: "gear")
-                    Text("Settings")
+                    Image(systemName: "icloud.slash")
+                    Text("Test")
                 }.tag(2)
-            TestView()
+            SearchView()
                 .onAppear{
                     selectedIndex = 3
                 }
                 .tabItem{
-                    Image(systemName: "icloud.slash")
-                    Text("Test")
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
                 }.tag(3)
+            SettingsView()
+                .onAppear{
+                    selectedIndex = 4
+                }
+                .tabItem{
+                    Image(systemName: "gear")
+                    Text("Settings")
+                }.tag(4)
         }
     }
 }

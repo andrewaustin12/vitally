@@ -14,6 +14,8 @@ struct APIResponse: Codable {
     }
 }
 
+
+
 // MARK: - Product
 struct Product: Codable, Identifiable {
     var id: String { code }
