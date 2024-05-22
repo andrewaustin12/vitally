@@ -128,7 +128,7 @@ struct Product: Codable, Identifiable {
             ),
             ecoscoreGrade: "d",
             ecoscoreScore: 33,
-            allergens: "en:nuts",
+            allergens: "",
             nutritionGrades: "e",
             productName: "Nutella",
             brands: "Nutella Ferrero",
@@ -138,34 +138,34 @@ struct Product: Codable, Identifiable {
 
 // MARK: - Nutriments
 struct Nutriments: Codable {
-    let carbohydrates, carbohydrates100G: Double
-    let carbohydratesUnit: String
-    let carbohydratesValue: Double
-    let energy, energyKcal, energyKcal100G: Int
-    let energyKcalUnit: String
-    let energyKcalValue: Int
-    let energyKcalValueComputed: Double
-    let energy100G: Int
-    let energyUnit: String
-    let energyValue: Int
-    let fat, fat100G: Double
-    let fatUnit: String
-    let fatValue: Double
-    let fruitsVegetablesLegumesEstimateFromIngredients100G, fruitsVegetablesLegumesEstimateFromIngredientsServing: Int
-    let fruitsVegetablesNutsEstimateFromIngredients100G, fruitsVegetablesNutsEstimateFromIngredientsServing: Double
-    let novaGroup, novaGroup100G, novaGroupServing, nutritionScoreFr: Int
-    let nutritionScoreFr100G: Int
-    let proteins, proteins100G: Double
-    let proteinsUnit: String
-    let proteinsValue, salt, salt100G: Double
-    let saltUnit: String
-    let saltValue, saturatedFat, saturatedFat100G: Double
-    let saturatedFatUnit: String
-    let saturatedFatValue, sodium, sodium100G: Double
-    let sodiumUnit: String
-    let sodiumValue, sugars, sugars100G: Double
-    let sugarsUnit: String
-    let sugarsValue: Double
+    let carbohydrates, carbohydrates100G: Double?
+    let carbohydratesUnit: String?
+    let carbohydratesValue: Double?
+    let energy, energyKcal, energyKcal100G: Double?
+    let energyKcalUnit: String?
+    let energyKcalValue: Double?
+    let energyKcalValueComputed: Double?
+    let energy100G: Double?
+    let energyUnit: String?
+    let energyValue: Double?
+    let fat, fat100G: Double?
+    let fatUnit: String?
+    let fatValue: Double?
+    let fruitsVegetablesLegumesEstimateFromIngredients100G, fruitsVegetablesLegumesEstimateFromIngredientsServing: Double?
+    let fruitsVegetablesNutsEstimateFromIngredients100G, fruitsVegetablesNutsEstimateFromIngredientsServing: Double?
+    let novaGroup, novaGroup100G, novaGroupServing, nutritionScoreFr: Double?
+    let nutritionScoreFr100G: Double?
+    let proteins, proteins100G: Double?
+    let proteinsUnit: String?
+    let proteinsValue, salt, salt100G: Double?
+    let saltUnit: String?
+    let saltValue, saturatedFat, saturatedFat100G: Double?
+    let saturatedFatUnit: String?
+    let saturatedFatValue, sodium, sodium100G: Double?
+    let sodiumUnit: String?
+    let sodiumValue, sugars, sugars100G: Double?
+    let sugarsUnit: String?
+    let sugarsValue: Double?
 
     enum CodingKeys: String, CodingKey {
         case carbohydrates
@@ -219,23 +219,25 @@ struct Nutriments: Codable {
 
 // MARK: - NutriscoreData
 struct NutriscoreData: Codable {
-    let energy, energyPoints, energyValue, fiber: Int
-    let fiberPoints, fiberValue: Int
-    let fruitsVegetablesNutsColzaWalnutOliveOils: Double
-    let fruitsVegetablesNutsColzaWalnutOliveOilsPoints: Int
-    let fruitsVegetablesNutsColzaWalnutOliveOilsValue: Double
-    let grade: String
-    let isBeverage, isCheese, isFat, isWater: Int
-    let negativePoints, positivePoints: Int
-    let proteins: Double
-    let proteinsPoints: Int
-    let proteinsValue, saturatedFat: Double
-    let saturatedFatPoints: Int
-    let saturatedFatValue: Double
-    let score, sodium, sodiumPoints, sodiumValue: Int
-    let sugars: Double
-    let sugarsPoints: Int
-    let sugarsValue: Double
+    let energy, energyPoints, energyValue: Double?
+    let fiber: Double?
+    let fiberPoints: Double?
+    let fiberValue: Double?
+    let fruitsVegetablesNutsColzaWalnutOliveOils: Double?
+    let fruitsVegetablesNutsColzaWalnutOliveOilsPoints: Double?
+    let fruitsVegetablesNutsColzaWalnutOliveOilsValue: Double?
+    let grade: String?
+    let isBeverage, isCheese, isFat, isWater: Double?
+    let negativePoints, positivePoints: Double?
+    let proteins: Double?
+    let proteinsPoints: Double?
+    let proteinsValue, saturatedFat: Double?
+    let saturatedFatPoints: Double?
+    let saturatedFatValue: Double?
+    let score, sodium, sodiumPoints, sodiumValue: Double?
+    let sugars: Double?
+    let sugarsPoints: Double?
+    let sugarsValue: Double?
 
     enum CodingKeys: String, CodingKey {
         case energy

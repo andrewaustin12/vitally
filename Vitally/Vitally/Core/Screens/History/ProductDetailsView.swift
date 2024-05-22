@@ -10,6 +10,7 @@ struct ProductDetailsView: View {
     @State private var isIngredientsExpanded = false
     @State private var isPositivesExpanded = true
     @State private var isNegativesExpanded = true
+    @State private var showAddToListSheet = false
     
     enum NutrientType {
         case energy, proteins, carbohydrates, fats, saturatedFat, sugars, salt, sodium, fiber, fruitsVegetablesNuts
@@ -18,7 +19,7 @@ struct ProductDetailsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section{
+                Section {
                     detailsHeader
                 }
                 
@@ -26,11 +27,9 @@ struct ProductDetailsView: View {
                     scoreGroupBoxes
                 }
                 
-                Section {
-                    Text(formattedAllergens)
-                } header: {
-                    Text("Allergens")
-                }
+                
+                allergenSection
+                
                 
                 Section {
                     DisclosureGroup("Positive Nutrients", isExpanded: $isPositivesExpanded) {
@@ -43,10 +42,22 @@ struct ProductDetailsView: View {
                         negativeNutrients
                     }
                 }
-                
             }
             .listStyle(.plain)
             .navigationTitle("Product Details")
+            .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button(action: {
+                                    showAddToListSheet = true
+                                }) {
+                                    Image(systemName: "plus")
+                                }
+                            }
+                        }
+                        .sheet(isPresented: $showAddToListSheet) {
+                            ListSelectionView(product: product)
+                                .environmentObject(ListViewModel())
+                        }
         }
     }
     
@@ -65,49 +76,27 @@ struct ProductDetailsView: View {
                     .font(.headline)
                     .foregroundColor(.gray)
                 
-                Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
-                    .font(.subheadline)
-                    .padding(.top, 8)
+                MatchPercentageView()
             }
             .lineLimit(2)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
     }
     
     private var scoreGroupBoxes: some View {
         VStack(alignment: .leading, spacing: 16) {
-            VStack {
-                HStack(spacing: 8) {
-                    VStack(alignment: .leading) {
-                        Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                        Text("Bad Nutritional quality")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    Spacer()
-                    
-                    Image(nutriScoreImageName(for: product.nutritionGrades))
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 55)
-                        .cornerRadius(8)
-                }
-            }
-            
-            HStack(spacing: 16) {
+            HStack(spacing: 8) {
                 VStack(alignment: .leading) {
-                    Text("NOVA: \(product.nutriments.novaGroup)")
+                    Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
                         .font(.title3)
                         .fontWeight(.bold)
-                    Text(novaGroupDescription(for: product.nutriments.novaGroup))
+                    Text("Bad Nutritional quality")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
                 Spacer()
-                Image(novaScoreImageName(for: product.nutriments.novaGroup))
+                
+                Image(nutriScoreImageName(for: product.nutritionGrades))
                     .resizable()
                     .scaledToFit()
                     .frame(height: 55)
@@ -116,7 +105,24 @@ struct ProductDetailsView: View {
             
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text("Eco-Score: \(product.ecoscoreGrade?.capitalized ?? "None Available")")
+                    Text("NOVA: \(Int(product.nutriments.novaGroup ?? 0))")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                    Text(novaGroupDescription(for: Int(product.nutriments.novaGroup ?? 0)))
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                Image(novaScoreImageName(for: Int(product.nutriments.novaGroup ?? 0)))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 55)
+                    .cornerRadius(8)
+            }
+            
+            HStack(spacing: 16) {
+                VStack(alignment: .leading) {
+                    Text("Eco-Score: \(product.ecoscoreGrade?.capitalized ?? "N/A")")
                         .font(.title3)
                         .fontWeight(.bold)
                     Text(ecoScoreDescription(for: product.ecoscoreGrade))
@@ -136,55 +142,69 @@ struct ProductDetailsView: View {
     
     private var positiveNutrients: some View {
         VStack(alignment: .leading, spacing: 8) {
-            
-            NutrientView(
-                name: "Fiber",
-                value: "\(product.nutriscoreData.fiber) g", 
-                dailyValue: "\(calculateDailyValue(for: Double(product.nutriscoreData.fiber),nutrient: .fiber))%",
-                iconName: "laurel.leading"
-            )
-            NutrientView(
-                name: "Proteins", value: "\(product.nutriments.proteins) g",
-                dailyValue: "\(calculateDailyValue(for: product.nutriments.proteins, nutrient: .proteins))%",
-                iconName: "fish.fill"
-            )
-            NutrientView(
+            if let fiber = product.nutriscoreData.fiber {
+                NutrientView(
+                    name: "Fiber",
+                    value: "\(fiber) g",
+                    dailyValue: "\(calculateDailyValue(for: fiber, nutrient: .fiber))%",
+                    iconName: "laurel.leading"
+                )
+            }
+            if let proteins = product.nutriments.proteins {
+                NutrientView(
+                    name: "Proteins", value: "\(proteins) g",
+                    dailyValue: "\(calculateDailyValue(for: proteins, nutrient: .proteins))%",
+                    iconName: "fish.fill"
+                )
+            }
+            if let fruitsVegetablesNuts = product.nutriscoreData.fruitsVegetablesNutsColzaWalnutOliveOils {
+                NutrientView(
                     name: "Fruits/Vegetables/Nuts",
-                    value: String(format: "%.2f g", Double(product.nutriscoreData.fruitsVegetablesNutsColzaWalnutOliveOils)),
-                    dailyValue: String(format: "%.0f%%", calculateDailyValue(for: Double(product.nutriscoreData.fruitsVegetablesNutsColzaWalnutOliveOils), nutrient: .fruitsVegetablesNuts)),
+                    value: String(format: "%.2f g", Double(fruitsVegetablesNuts)),
+                    dailyValue: String(format: "%.0f%%", calculateDailyValue(for: Double(fruitsVegetablesNuts), nutrient: .fruitsVegetablesNuts)),
                     iconName: "leaf.fill"
                 )
+            }
         }
     }
     
     private var negativeNutrients: some View {
         VStack(alignment: .leading, spacing: 8) {
-            
-            NutrientView(
-                name: "Energy", value: "\(product.nutriments.energyKcal) kcal",
-                dailyValue: "\(calculateDailyValue(for: Double(product.nutriments.energyKcal), nutrient: .energy))%",
-                iconName: "flame.fill"
-            )
-            NutrientView(
-                name: "Sugars", value: "\(product.nutriments.sugars) g",
-                dailyValue: "\(calculateDailyValue(for: product.nutriments.sugars, nutrient: .sugars))%",
-                iconName: "cube.fill"
-            )
-            NutrientView(
-                name: "Saturated Fat", value: "\(product.nutriments.saturatedFat) g",
-                dailyValue: "\(calculateDailyValue(for: product.nutriments.saturatedFat, nutrient: .saturatedFat))%",
-                iconName: "drop.triangle.fill"
-            )
-            NutrientView(
-                name: "Salt", value: "\(product.nutriments.salt) g",
-                dailyValue: "\(calculateDailyValue(for: product.nutriments.salt, nutrient: .salt))%",
-                iconName: "sparkles"
-            )
-            NutrientView(
-                name: "Sodium", value: "\(product.nutriments.sodium) g",
-                dailyValue: "\(calculateDailyValue(for: product.nutriments.sodium * 1000, nutrient: .sodium))%",
-                iconName: "triangle.fill"
-            )
+            if let energyKcal = product.nutriments.energyKcal {
+                NutrientView(
+                    name: "Energy", value: "\(energyKcal) kcal",
+                    dailyValue: "\(calculateDailyValue(for: Double(energyKcal), nutrient: .energy))%",
+                    iconName: "flame.fill"
+                )
+            }
+            if let sugars = product.nutriments.sugars {
+                NutrientView(
+                    name: "Sugars", value: "\(sugars) g",
+                    dailyValue: "\(calculateDailyValue(for: sugars, nutrient: .sugars))%",
+                    iconName: "cube.fill"
+                )
+            }
+            if let saturatedFat = product.nutriments.saturatedFat {
+                NutrientView(
+                    name: "Saturated Fat", value: "\(saturatedFat) g",
+                    dailyValue: "\(calculateDailyValue(for: saturatedFat, nutrient: .saturatedFat))%",
+                    iconName: "drop.triangle.fill"
+                )
+            }
+            if let salt = product.nutriments.salt {
+                NutrientView(
+                    name: "Salt", value: "\(salt) g",
+                    dailyValue: "\(calculateDailyValue(for: salt, nutrient: .salt))%",
+                    iconName: "sparkles"
+                )
+            }
+            if let sodium = product.nutriments.sodium {
+                NutrientView(
+                    name: "Sodium", value: "\(sodium) g",
+                    dailyValue: "\(calculateDailyValue(for: sodium * 1000, nutrient: .sodium))%",
+                    iconName: "triangle.fill"
+                )
+            }
         }
     }
     
@@ -270,7 +290,7 @@ struct ProductDetailsView: View {
             return "eco-grade-unknown"
         }
     }
-
+    
     private func ecoScoreDescription(for grade: String?) -> String {
         guard let grade = grade?.lowercased() else {
             return "Not Available"
@@ -290,8 +310,35 @@ struct ProductDetailsView: View {
             return "None Available"
         }
     }
-
     
+    
+    private var allergenSection: some View {
+        Section(header: Text("Allergens").font(.headline)) {
+            if let allergens = product.allergens, !allergens.isEmpty {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.red)
+                    Text(formattedAllergens)
+                        .foregroundColor(.primary)
+                        .padding(.leading, 4)
+                }
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .cornerRadius(8)
+            } else {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("None Reported")
+                        .font(.headline)
+                        .fontWeight(.medium)
+                        .padding(.leading)
+                }
+                    
+            }
+        }
+    }
+
+
+
     private var formattedAllergens: String {
         guard let allergens = product.allergens else {
             return "N/A"
@@ -301,7 +348,10 @@ struct ProductDetailsView: View {
             .map { $0.replacingOccurrences(of: "en:", with: "").capitalized }
             .joined(separator: ", ")
     }
+
 }
+
+
 
 #Preview {
     ProductDetailsView(product: Product.mockProduct)

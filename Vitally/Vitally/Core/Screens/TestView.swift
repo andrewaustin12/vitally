@@ -13,14 +13,16 @@ struct TestView: View {
     @EnvironmentObject var historyViewModel: HistoryViewModel  // EnvironmentObject to access history
     @State private var showDetailsSheet = false  // State to control sheet presentation
     
-    let nutella: String = "3017624010701"
+    let fruitBars: String = "3256228097361"
+    let cookies: String  = "3017760654098"
+    let nutella: String =  "3017624010701"
     let Coke: String = "5449000000439"
 
     var body: some View {
         VStack {
             Button("Fetch Food Product") {
                 Task {
-                    let barcode = Coke // Replace this with the scanned barcode
+                    let barcode = fruitBars // Replace this with the scanned barcode
                     await viewModel.fetchFoodProduct(barcode: barcode)
                     if viewModel.product != nil {
                         DispatchQueue.main.async {
@@ -34,6 +36,9 @@ struct TestView: View {
         .sheet(isPresented: $showDetailsSheet) {
             if let product = viewModel.product {
                 ProductDetailsView(product: product)
+                    .presentationDetents([.fraction(0.25), .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
             } else {
                 Text("No product details available")
             }

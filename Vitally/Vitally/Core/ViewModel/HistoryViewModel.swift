@@ -1,9 +1,7 @@
-import SwiftUI
+import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-
-import SwiftUI
-import FirebaseFirestore
+import FirebaseAuth
 
 class HistoryViewModel: ObservableObject {
     @Published var products: [Product] = []
@@ -11,7 +9,8 @@ class HistoryViewModel: ObservableObject {
     private var db = Firestore.firestore()
 
     func fetchProducts() {
-        db.collection("products")
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        db.collection("users").document(userId).collection("history")
             .order(by: "timestamp", descending: true)
             .limit(to: 20)
             .getDocuments { (querySnapshot, error) in
@@ -23,5 +22,26 @@ class HistoryViewModel: ObservableObject {
                     } ?? []
                 }
             }
+    }
+
+    func deleteProduct(_ product: Product) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        db.collection("users").document(userId).collection("history").document(product.id).delete { error in
+            if let error = error {
+                print("Error removing document: \(error)")
+            } else {
+                self.products.removeAll { $0.id == product.id }
+            }
+        }
+    }
+
+    func addProductToHistory(_ product: Product) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        do {
+            let _ = try db.collection("users").document(userId).collection("history").addDocument(from: product)
+            self.products.append(product)
+        } catch {
+            print("Error saving product to history: \(error.localizedDescription)")
+        }
     }
 }
