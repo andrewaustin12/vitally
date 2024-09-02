@@ -1,13 +1,12 @@
 import SwiftUI
 
 struct ListsView: View {
-    @State private var newListName: String = ""
     @State private var isShowingModal = false
     @State private var isShowingDeleteAlert = false
     @State private var listToDelete: FoodList? = nil
     
     @EnvironmentObject var listViewModel: ListViewModel
-
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -31,27 +30,10 @@ struct ListsView: View {
                     }
                 }
                 .sheet(isPresented: $isShowingModal) {
-                    VStack {
-                        TextField("New List Name", text: $newListName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-
-                        Button(action: {
-                            if !newListName.isEmpty {
-                                listViewModel.createList(name: newListName)
-                                newListName = ""
-                                isShowingModal = false
-                            }
-                        }) {
-                            Text("Create List")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(8)
-                        }
-                        .padding()
-                    }
-                    .padding()
+                    NewListView(isPresented: $isShowingModal)
+                        .presentationDetents([.medium])
+                        .presentationCornerRadius(30)
+                        .environmentObject(listViewModel) // Pass the environment object
                 }
                 .alert(isPresented: $isShowingDeleteAlert) {
                     Alert(
@@ -73,7 +55,7 @@ struct ListsView: View {
             }
         }
     }
-
+    
     private func confirmDeleteList(at offsets: IndexSet) {
         if let index = offsets.first {
             listToDelete = listViewModel.lists[index]

@@ -29,7 +29,7 @@ struct SearchCatagoryRowView: View {
 #Preview {
     let mockProduct = Product.mockProduct
     return SearchCatagoryRowView(
-        imageName: mockProduct.imageURL ?? "",
+        imageName: mockProduct.imageURL,
         imageSize: 50,
         productName: mockProduct.productName,
         brands: mockProduct.brands,

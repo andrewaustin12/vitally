@@ -35,7 +35,7 @@ struct ListDetailView: View {
                 ForEach(uniqueProducts) { product in
                     NavigationLink(destination: ProductDetailsView(product: product)) {
                         HStack {
-                            ImageLoaderView(urlString: product.imageURL ?? "")
+                            ImageLoaderView(urlString: product.imageURL)
                                 .frame(width: imageSize, height: imageSize)
                                 .cornerRadius(8)
                             VStack(alignment: .leading) {

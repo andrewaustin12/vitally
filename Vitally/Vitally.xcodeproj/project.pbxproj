@@ -314,12 +314,12 @@
 		3FEA9B3A2BF20999009598CA /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				3F9DCBD32BF34E2A00E10205 /* History */,
-				3FDC5F8C2BFDD0EC0029BFE8 /* Lists */,
 				3F710F7D2BF66AFF005E689C /* Onboarding */,
+				3F9DCBD32BF34E2A00E10205 /* History */,
 				3F9DCBE02BF56C2800E10205 /* Search */,
-				3F9DCBD12BF34E1700E10205 /* Settings */,
 				3F9DCBD22BF34E1F00E10205 /* Scanner */,
+				3FDC5F8C2BFDD0EC0029BFE8 /* Lists */,
+				3F9DCBD12BF34E1700E10205 /* Settings */,
 				3FEA9B402BF21828009598CA /* TestView.swift */,
 			);
 			path = Screens;

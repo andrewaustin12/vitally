@@ -76,7 +76,7 @@ struct ProductDetailsView: View {
             .onAppear {
                 calculateMatchScore()
             }
-            .onChange(of: product) { newValue in
+            .onChange(of: product) { 
                 calculateMatchScore()
             }
             .toolbar {
