@@ -51,7 +51,10 @@ class FoodProductViewModel: ObservableObject {
             "brands",
             "ecoscore_grade",
             "ecoscore_score",
-            "allergens"
+            "allergens",
+            "labels_tags",
+            "ingredients_text",
+            "additives_tags"
         ].joined(separator: ",")
         
         let endpoint = "https://world.openfoodfacts.org/api/v2/product/\(barcode)?fields=\(fields)"

@@ -64,11 +64,11 @@ struct ScannerView: View {
                 Text("No product details available")
             }
         }
-        .alert(isPresented: $showNoProductSheet) {
-            Alert(title: Text("No Product Found"), message: Text("The scanned barcode did not match any products."), dismissButton: .default(Text("OK"), action: {
-                isScanning = true  // Restart scanning after alert dismissal
+        .sheet(isPresented: $showNoProductSheet) {
+            NoProductFoundView(isPresented: $showNoProductSheet) {
+                isScanning = true  // Restart scanning after sheet dismissal
                 viewModel.resetProduct()  // Reset the product details
-            }))
+            }.presentationDetents([.fraction(0.35)])
         }
     }
 

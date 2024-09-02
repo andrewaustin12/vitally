@@ -1,19 +1,15 @@
 import SwiftUI
 
-struct MatchPercentageView: View {
+struct FoodScorePreviewView: View {
     var percentage: Int
     var description: String
     
     var body: some View {
         HStack {
-            RoundedRectangle(cornerRadius: 10)
+            Circle()
                 .fill(colorForPercentage(percentage))
-                .frame(width: 37, height: 37)
-                .overlay(
-                    Text("\(percentage)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                )
+                .frame(width: 15, height: 15)
+                
                 .clipShape(
                     RoundedRectangle(cornerRadius: 10)
                 )
@@ -23,8 +19,7 @@ struct MatchPercentageView: View {
                 .foregroundColor(.gray)
                 .padding(.trailing)
         }
-        .background(colorForPercentage(percentage).opacity(0.2))
-        .cornerRadius(10)
+        
     }
     
     private func colorForPercentage(_ percentage: Int) -> Color {
@@ -59,10 +54,10 @@ struct MatchPercentageView: View {
 }
 
 #Preview {
-    MatchPercentageView(percentage: 5, description: "Match with your food preferences")
+    FoodScorePreviewView(percentage: 5, description: "Match with your food preferences")
 }
 
 
 #Preview {
-    MatchPercentageView(percentage: 85, description: "Match with your food preferences")
+    FoodScorePreviewView(percentage: 85, description: "Match with your food preferences")
 }

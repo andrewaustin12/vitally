@@ -15,19 +15,26 @@ struct APIResponse: Codable {
 }
 
 
-
 // MARK: - Product
-struct Product: Codable, Identifiable {
+struct Product: Codable, Identifiable, Equatable {
     var id: String { code }
     let code: String
     let imageURL: String
     let nutriments: Nutriments
-    let nutriscoreData: NutriscoreData
+    let nutriscoreData: NutriscoreData?
     let ecoscoreGrade: String?
     let ecoscoreScore: Int?
     let allergens: String?
+    let ingredients: String? // Add ingredients
+    let labels: [String]? // Add labels
     let nutritionGrades, productName, brands: String
-    let timestamp: Date?
+    let additives: [String]?
+    let vitamins: [String]?
+    var timestamp: Date?
+    
+    static func ==(lhs: Product, rhs: Product) -> Bool {
+            return lhs.id == rhs.id
+        }
 
     enum CodingKeys: String, CodingKey {
         case code
@@ -37,9 +44,13 @@ struct Product: Codable, Identifiable {
         case ecoscoreGrade = "ecoscore_grade"
         case ecoscoreScore = "ecoscore_score"
         case allergens = "allergens"
+        case ingredients = "ingredients_text" // Match the API response key
+        case labels = "labels_tags" // Match the API response key
         case nutritionGrades = "nutrition_grades"
         case productName = "product_name"
         case brands = "brands"
+        case additives = "additives_tags"
+        case vitamins = "vitamins_tags"
         case timestamp
     }
     
@@ -128,10 +139,14 @@ struct Product: Codable, Identifiable {
             ),
             ecoscoreGrade: "d",
             ecoscoreScore: 33,
-            allergens: "",
+            allergens: "fish, shells",
+            ingredients: "sugar, palm oil, hazelnuts, skimmed milk powder, fat reduced cocoa, emulsifier, vanillin",
+            labels: [],
             nutritionGrades: "e",
             productName: "Nutella",
             brands: "Nutella Ferrero",
+            additives: ["palm oil"],
+            vitamins: ["vitamin-d"],
             timestamp: Date()
         )
 }

@@ -1,6 +1,13 @@
 {
   "images" : [
     {
+      "display-gamut" : "sRGB",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "display-gamut" : "display-P3",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

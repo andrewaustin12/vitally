@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F05CD5F2C41D50800C686D1 /* FoodScorePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F05CD5E2C41D50800C686D1 /* FoodScorePreviewView.swift */; };
 		3F13AADA2BF2BA7500CB4945 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3F13AAD92BF2BA7500CB4945 /* SDWebImageSwiftUI */; };
 		3F13AADC2BF2BA8600CB4945 /* ImageLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F13AADB2BF2BA8600CB4945 /* ImageLoaderView.swift */; };
 		3F13AADE2BF2BC4B00CB4945 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F13AADD2BF2BC4B00CB4945 /* Constants.swift */; };
@@ -36,6 +37,10 @@
 		3FDC5F942BFDD4DD0029BFE8 /* NewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F932BFDD4DD0029BFE8 /* NewListView.swift */; };
 		3FDC5F962BFDF7310029BFE8 /* ListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F952BFDF7310029BFE8 /* ListDetailView.swift */; };
 		3FDC5F982BFDFFAF0029BFE8 /* ListSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F972BFDFFAF0029BFE8 /* ListSelectionView.swift */; };
+		3FDC5F9A2BFF9D040029BFE8 /* ProductDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F992BFF9D040029BFE8 /* ProductDetailsViewModel.swift */; };
+		3FDC5F9C2C00F5860029BFE8 /* NoProductFoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F9B2C00F5860029BFE8 /* NoProductFoundView.swift */; };
+		3FDC5F9E2C0113360029BFE8 /* SearchCatagoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F9D2C0113360029BFE8 /* SearchCatagoryRowView.swift */; };
+		3FDC5FA02C04E2810029BFE8 /* SearchProductDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F9F2C04E2810029BFE8 /* SearchProductDetailsView.swift */; };
 		3FEA9B102BF13F08009598CA /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B092BF13F08009598CA /* AuthViewModel.swift */; };
 		3FEA9B112BF13F08009598CA /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B0B2BF13F08009598CA /* ForgotPasswordView.swift */; };
 		3FEA9B122BF13F08009598CA /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEA9B0C2BF13F08009598CA /* LoginView.swift */; };
@@ -57,6 +62,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3F05CD5E2C41D50800C686D1 /* FoodScorePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodScorePreviewView.swift; sourceTree = "<group>"; };
+		3F05CD602C428AF400C686D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3F13AADB2BF2BA8600CB4945 /* ImageLoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoaderView.swift; sourceTree = "<group>"; };
 		3F13AADD2BF2BC4B00CB4945 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3F48F0602BF0B2090007EC25 /* Vitally.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vitally.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +93,10 @@
 		3FDC5F932BFDD4DD0029BFE8 /* NewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListView.swift; sourceTree = "<group>"; };
 		3FDC5F952BFDF7310029BFE8 /* ListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailView.swift; sourceTree = "<group>"; };
 		3FDC5F972BFDFFAF0029BFE8 /* ListSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectionView.swift; sourceTree = "<group>"; };
+		3FDC5F992BFF9D040029BFE8 /* ProductDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewModel.swift; sourceTree = "<group>"; };
+		3FDC5F9B2C00F5860029BFE8 /* NoProductFoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoProductFoundView.swift; sourceTree = "<group>"; };
+		3FDC5F9D2C0113360029BFE8 /* SearchCatagoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCatagoryRowView.swift; sourceTree = "<group>"; };
+		3FDC5F9F2C04E2810029BFE8 /* SearchProductDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProductDetailsView.swift; sourceTree = "<group>"; };
 		3FEA9B092BF13F08009598CA /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		3FEA9B0B2BF13F08009598CA /* ForgotPasswordView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		3FEA9B0C2BF13F08009598CA /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -137,6 +148,7 @@
 		3F48F0622BF0B2090007EC25 /* Vitally */ = {
 			isa = PBXGroup;
 			children = (
+				3F05CD602C428AF400C686D1 /* Info.plist */,
 				3FDC5F812BFBB32B0029BFE8 /* Utils */,
 				3F48F0632BF0B2090007EC25 /* VitallyApp.swift */,
 				3FEA9B0F2BF13F08009598CA /* Authentication */,
@@ -183,6 +195,7 @@
 			children = (
 				3FEA9B382BF2089D009598CA /* ScannerView.swift */,
 				3F9DCBDE2BF4F79B00E10205 /* ScannerSheetView.swift */,
+				3FDC5F9B2C00F5860029BFE8 /* NoProductFoundView.swift */,
 			);
 			path = Scanner;
 			sourceTree = "<group>";
@@ -191,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				3FEA9B3B2BF209BD009598CA /* HistoryView.swift */,
-				3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -284,13 +296,17 @@
 		3FEA9B252BF1408C009598CA /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				3FEA9B362BF14BB9009598CA /* SettingsRowView.swift */,
+				3F13AADD2BF2BC4B00CB4945 /* Constants.swift */,
 				3FEA9B282BF14117009598CA /* InputView.swift */,
 				3F13AADB2BF2BA8600CB4945 /* ImageLoaderView.swift */,
-				3F13AADD2BF2BC4B00CB4945 /* Constants.swift */,
 				3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */,
 				3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */,
 				3FDC5F8A2BFD23BA0029BFE8 /* MatchPercentageView.swift */,
+				3F05CD5E2C41D50800C686D1 /* FoodScorePreviewView.swift */,
+				3F9DCBD62BF39F7200E10205 /* ProductDetailsView.swift */,
+				3FEA9B362BF14BB9009598CA /* SettingsRowView.swift */,
+				3FDC5F9D2C0113360029BFE8 /* SearchCatagoryRowView.swift */,
+				3FDC5F9F2C04E2810029BFE8 /* SearchProductDetailsView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -316,6 +332,7 @@
 				3FEA9B432BF21BF4009598CA /* FoodProductViewModel.swift */,
 				3F9DCBD42BF34EEE00E10205 /* HistoryViewModel.swift */,
 				3FDC5F912BFDD3B90029BFE8 /* ListViewModel.swift */,
+				3FDC5F992BFF9D040029BFE8 /* ProductDetailsViewModel.swift */,
 				3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */,
 			);
 			path = ViewModel;
@@ -412,6 +429,7 @@
 				3FDC5F982BFDFFAF0029BFE8 /* ListSelectionView.swift in Sources */,
 				3F9DCBD52BF34EEE00E10205 /* HistoryViewModel.swift in Sources */,
 				3FDC5F942BFDD4DD0029BFE8 /* NewListView.swift in Sources */,
+				3F05CD5F2C41D50800C686D1 /* FoodScorePreviewView.swift in Sources */,
 				3FEA9B2D2BF14488009598CA /* MainTab.swift in Sources */,
 				3FDC5F8B2BFD23BA0029BFE8 /* MatchPercentageView.swift in Sources */,
 				3FEA9B442BF21BF4009598CA /* FoodProductViewModel.swift in Sources */,
@@ -424,6 +442,7 @@
 				3F710F812BF66F65005E689C /* OnboardingTabView.swift in Sources */,
 				3FDC5F902BFDD3A10029BFE8 /* FoodList.swift in Sources */,
 				3FDC5F8E2BFDD0F90029BFE8 /* ListsView.swift in Sources */,
+				3FDC5F9C2C00F5860029BFE8 /* NoProductFoundView.swift in Sources */,
 				3FEA9B132BF13F08009598CA /* RegistrationView.swift in Sources */,
 				3FEA9B292BF14117009598CA /* InputView.swift in Sources */,
 				3F9DCBE62BF56EC000E10205 /* Search.swift in Sources */,
@@ -434,12 +453,15 @@
 				3F9DCBDA2BF4C18F00E10205 /* NovaBadgeView.swift in Sources */,
 				3FEA9B102BF13F08009598CA /* AuthViewModel.swift in Sources */,
 				3FEA9B332BF14B22009598CA /* SettingsView.swift in Sources */,
+				3FDC5FA02C04E2810029BFE8 /* SearchProductDetailsView.swift in Sources */,
 				3F13AADC2BF2BA8600CB4945 /* ImageLoaderView.swift in Sources */,
 				3F9DCBE42BF56E1700E10205 /* SearchViewModel.swift in Sources */,
 				3F710F7F2BF66B71005E689C /* Onboarding1View.swift in Sources */,
 				3FEA9B3F2BF21387009598CA /* Product.swift in Sources */,
 				3FDC5F892BFD236F0029BFE8 /* FoodPreferencesView.swift in Sources */,
 				3FDC5F922BFDD3B90029BFE8 /* ListViewModel.swift in Sources */,
+				3FDC5F9A2BFF9D040029BFE8 /* ProductDetailsViewModel.swift in Sources */,
+				3FDC5F9E2C0113360029BFE8 /* SearchCatagoryRowView.swift in Sources */,
 				3F13AADE2BF2BC4B00CB4945 /* Constants.swift in Sources */,
 				3F9DCBDF2BF4F79B00E10205 /* ScannerSheetView.swift in Sources */,
 			);
@@ -578,12 +600,14 @@
 				DEVELOPMENT_TEAM = BV862H23C8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Vitally/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app need access to your camera to scan products.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = LIGHT;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -608,12 +632,14 @@
 				DEVELOPMENT_TEAM = BV862H23C8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Vitally/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app need access to your camera to scan products.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = LIGHT;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

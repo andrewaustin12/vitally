@@ -18,7 +18,7 @@ struct MainTab: View {
 
             /// SEARCH VIEW
             NavigationStack {
-                TestView()
+                SearchView()
             }
             .tabItem {
                 Image(systemName: "magnifyingglass")

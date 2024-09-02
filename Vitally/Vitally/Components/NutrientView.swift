@@ -1,37 +1,59 @@
-//
-//  NutrientView.swift
-//  Vitally
-//
-//  Created by andrew austin on 5/15/24.
-//
 import SwiftUI
 
 struct NutrientView: View {
-    let name: String
-    let value: String
-    let dailyValue: String
-    let iconName: String
-    
+    var name: String
+    var value: String
+    var isPositive: Bool
+
     var body: some View {
         HStack {
-            Image(systemName: iconName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-                .foregroundColor(.teal)
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(name)
+            Image(systemName: isPositive ? iconForPositiveNutrient(name) : iconForNegativeNutrient(name))
+                .foregroundColor(isPositive ? .green : .red)
+            HStack {
+                Text(name.capitalized)
                     .font(.headline)
-                    .fontWeight(.medium)
-                Text("\(dailyValue) of daily value")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .fontWeight(.bold)
+                Text(value)
+                    .font(.headline)
+                    .foregroundColor(.secondary)
             }
-            Spacer()
-            Text(value)
-                .font(.body)
         }
-        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
+
+    private func iconForPositiveNutrient(_ nutrient: String) -> String {
+        let nutrientIcons: [String: String] = [
+            "fiber": "leaf.fill",
+            "proteins": "fish",
+            "vitamins": "pills.fill",
+            "mineral": "diamond.fill",
+            "omega-3": "fish.fill",
+            "antioxidant": "sparkles"
+        ]
+        return nutrientIcons[nutrient.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)] ?? "checkmark"
+    }
+
+    private func iconForNegativeNutrient(_ nutrient: String) -> String {
+        let nutrientIcons: [String: String] = [
+            "sugars": "cube.fill",
+            "salt": "sparkles",
+            "saturated fat": "drop.triangle.fill",
+            "trans fat": "exclamationmark.triangle.fill",
+            "artificial": "xmark.circle.fill",
+            "preservative": "exclamationmark.octagon.fill",
+            "coloring": "paintbrush.fill"
+        ]
+        return nutrientIcons[nutrient.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)] ?? "x.circle"
+    }
+}
+
+#Preview {
+    Group {
+        NutrientView(name: "proteins", value: "5 g", isPositive: true)
+            .previewDisplayName("Positive Nutrient")
+
+        NutrientView(name: "sugar", value: "10 g", isPositive: false)
+            .previewDisplayName("Negative Nutrient")
+    }
+    .previewLayout(.sizeThatFits)
 }

@@ -60,7 +60,19 @@ struct Scanner: UIViewControllerRepresentable {
             captureSession.addOutput(metadataOutput)
 
             metadataOutput.setMetadataObjectsDelegate(context.coordinator, queue: DispatchQueue.main)
-            metadataOutput.metadataObjectTypes = [.ean8, .ean13, .pdf417]
+            metadataOutput.metadataObjectTypes = [
+                .ean8,
+                .ean13,
+                .pdf417,
+                .code39,
+                .code93,
+                .code128,
+                .dataMatrix,
+                .itf14,
+                .upce,
+                .aztec,
+                .qr
+            ]
         } else {
             return viewController
         }
