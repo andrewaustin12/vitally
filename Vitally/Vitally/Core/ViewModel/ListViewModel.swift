@@ -69,5 +69,17 @@ class ListViewModel: ObservableObject {
         }
     }
     
-    
+    func deleteList(_ list: FoodList) {
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+            db.collection("users").document(userId).collection("lists").document(list.id).delete { error in
+                if let error = error {
+                    print("Error deleting list: \(error.localizedDescription)")
+                } else {
+                    // Optionally, remove the list from the local `lists` array
+                    DispatchQueue.main.async {
+                        self.lists.removeAll { $0.id == list.id }
+                    }
+                }
+            }
+        }
 }
