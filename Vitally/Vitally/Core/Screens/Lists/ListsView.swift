@@ -1,17 +1,19 @@
 import SwiftUI
+import SwiftData
 
 struct ListsView: View {
     @State private var isShowingModal = false
     @State private var isShowingDeleteAlert = false
-    @State private var listToDelete: FoodList? = nil
+    @State private var listToDelete: UserList? = nil
     
-    @EnvironmentObject var listViewModel: ListViewModel
+    @Query(sort: \UserList.lastModified, order: .reverse) private var lists: [UserList]
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationStack {
             VStack {
                 List {
-                    ForEach(listViewModel.lists) { list in
+                    ForEach(lists) { list in
                         NavigationLink(destination: ListDetailView(list: list)) {
                             Text(list.name)
                         }
@@ -33,7 +35,6 @@ struct ListsView: View {
                     NewListView(isPresented: $isShowingModal)
                         .presentationDetents([.medium])
                         .presentationCornerRadius(30)
-                        .environmentObject(listViewModel) // Pass the environment object
                 }
                 .alert(isPresented: $isShowingDeleteAlert) {
                     Alert(
@@ -42,15 +43,12 @@ struct ListsView: View {
                         primaryButton: .destructive(Text("Delete")) {
                             if let listToDelete = listToDelete {
                                 withAnimation {
-                                    listViewModel.deleteList(listToDelete)
+                                    modelContext.delete(listToDelete)
                                 }
                             }
                         },
                         secondaryButton: .cancel()
                     )
-                }
-                .onAppear {
-                    listViewModel.fetchLists()
                 }
             }
         }
@@ -58,7 +56,7 @@ struct ListsView: View {
     
     private func confirmDeleteList(at offsets: IndexSet) {
         if let index = offsets.first {
-            listToDelete = listViewModel.lists[index]
+            listToDelete = lists[index]
             isShowingDeleteAlert = true
         }
     }
@@ -67,6 +65,5 @@ struct ListsView: View {
 struct ListsView_Previews: PreviewProvider {
     static var previews: some View {
         ListsView()
-            .environmentObject(ListViewModel())
     }
 }

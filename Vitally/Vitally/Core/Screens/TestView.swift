@@ -10,7 +10,6 @@ import SwiftUI
 
 struct TestView: View {
     @StateObject var viewModel = FoodProductViewModel()
-    @EnvironmentObject var historyViewModel: HistoryViewModel  // EnvironmentObject to access history
     @State private var showDetailsSheet = false  // State to control sheet presentation
     
     let fruitBars: String = "3256228097361"
@@ -27,7 +26,6 @@ struct TestView: View {
                     if viewModel.product != nil {
                         DispatchQueue.main.async {
                             showDetailsSheet = true  // Show the sheet when product data is fetched
-                            //historyViewModel.addProduct(product)  // Add product to history
                         }
                     }
                 }
@@ -48,8 +46,6 @@ struct TestView: View {
 
 #Preview {
     TestView()
-        .environmentObject(HistoryViewModel())
-        .environmentObject(AuthViewModel())
 }
 
 

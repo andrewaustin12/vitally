@@ -2,8 +2,6 @@ import SwiftUI
 
 struct ProductDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var foodPreferenceVM: FoodPreferenceViewModel
-    @EnvironmentObject var productDetailsVM: ProductDetailsViewModel
     var product: Product
     @State private var matchScore: Int = 0
     var imageSize: CGFloat = 120
@@ -90,7 +88,6 @@ struct ProductDetailsView: View {
             }
             .sheet(isPresented: $showAddToListSheet) {
                 ListSelectionView(product: product)
-                    .environmentObject(ListViewModel())
             }
         }
     }
@@ -102,11 +99,11 @@ struct ProductDetailsView: View {
                 .cornerRadius(8)
             
             VStack(alignment: .leading, spacing: 8) {
-                Text(product.productName)
+                Text(product.displayName)
                     .font(.title2)
                     .fontWeight(.bold)
                 
-                Text(product.brands)
+                Text(product.displayBrands)
                     .font(.headline)
                     .foregroundColor(.gray)
                 
@@ -122,16 +119,16 @@ struct ProductDetailsView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 8) {
                 VStack(alignment: .leading) {
-                    Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
+                    Text("Nutri-Score: \(product.displayNutritionGrades.capitalized)")
                         .font(.title3)
                         .fontWeight(.bold)
-                    Text(nutriScoreDescription(for: String(product.nutritionGrades.capitalized)))
+                    Text(nutriScoreDescription(for: String(product.displayNutritionGrades.capitalized)))
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
                 Spacer()
                 
-                Image(nutriScoreImageName(for: product.nutritionGrades))
+                Image(nutriScoreImageName(for: product.displayNutritionGrades))
                     .resizable()
                     .scaledToFit()
                     .frame(height: 55)
@@ -476,8 +473,4 @@ struct ProductDetailsView: View {
 
 #Preview {
     ProductDetailsView(product: Product.mockProduct)
-        .environmentObject(AuthViewModel())
-        .environmentObject(HistoryViewModel())
-        .environmentObject(FoodPreferenceViewModel())
-        .environmentObject(ProductDetailsViewModel())
 }

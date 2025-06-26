@@ -1,116 +1,89 @@
 import SwiftUI
+import SwiftData
 
 struct FoodPreferencesView: View {
-    @EnvironmentObject var foodPreferenceVM: FoodPreferenceViewModel
+    @Query private var preferences: [UserPreference]
+    @Environment(\.modelContext) private var modelContext
+    @State private var selectedCategories: Set<String> = []
+    
+    private let availableCategories = [
+        "Good Nutritional Quality",
+        "Low Salt",
+        "Low Sugar", 
+        "Low Fat",
+        "Low Saturated Fat",
+        "No Processing",
+        "No Additives",
+        "Vegan",
+        "Vegetarian",
+        "Organic",
+        "Fair Trade",
+        "Low Environmental Impact"
+    ]
     
     var body: some View {
         Form {
-            // Nutritional Quality Section
-            Section(header: Text("Nutritional Quality").font(.headline)) {
-                Text("Set your preferences for the nutritional quality of the products.")
+            Section(header: Text("Food Preferences").font(.headline)) {
+                Text("Select the food preferences that are important to you.")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
-                PreferencePicker(title: "Good nutritional quality (Nutri-Score)", selection: $foodPreferenceVM.preferences.goodNutritionalQuality)
-                PreferencePicker(title: "Salt in low quantity", selection: $foodPreferenceVM.preferences.lowSalt)
-                PreferencePicker(title: "Sugars in low quantity", selection: $foodPreferenceVM.preferences.lowSugar)
-                PreferencePicker(title: "Fat in low quantity", selection: $foodPreferenceVM.preferences.lowFat)
-                PreferencePicker(title: "Saturated fat in low quantity", selection: $foodPreferenceVM.preferences.lowSaturatedFat)
-            }
-            
-            // Food Processing Section
-            Section(header: Text("Food Processing").font(.headline)) {
-                Text("Set your preferences for food processing.")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                PreferencePicker(title: "No or little food processing (NOVA group)", selection: $foodPreferenceVM.preferences.noOrLittleProcessing)
-                PreferencePicker(title: "No or few additives", selection: $foodPreferenceVM.preferences.noOrFewAdditives)
-            }
-            
-            // Allergens Section
-            Section(header: Text("Allergens").font(.headline)) {
-                Text("Specify your allergen preferences.")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                ForEach(foodPreferenceVM.preferences.allergens.keys.sorted(), id: \.self) { key in
-                    PreferencePicker(title: key, selection: Binding(
-                        get: { foodPreferenceVM.preferences.allergens[key] ?? .notImportant },
-                        set: { foodPreferenceVM.preferences.allergens[key] = $0 }
-                    ))
+                ForEach(availableCategories, id: \.self) { category in
+                    let isEnabled = preferences.first { $0.category == category }?.isEnabled ?? false
+                    
+                    HStack {
+                        Text(category)
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Toggle("", isOn: Binding(
+                            get: { isEnabled },
+                            set: { newValue in
+                                togglePreference(category: category, isEnabled: newValue)
+                            }
+                        ))
+                    }
+                    .padding(.vertical, 4)
                 }
             }
             
-            // Ingredients Section
-            Section(header: Text("Ingredients").font(.headline)) {
-                Text("Set your preferences for specific ingredients.")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                ForEach(foodPreferenceVM.preferences.ingredients.keys.sorted(), id: \.self) { key in
-                    PreferencePicker(title: key, selection: Binding(
-                        get: { foodPreferenceVM.preferences.ingredients[key] ?? .notImportant },
-                        set: { foodPreferenceVM.preferences.ingredients[key] = $0 }
-                    ))
+            Section {
+                Button("Clear All Preferences") {
+                    clearAllPreferences()
                 }
-            }
-            
-            // Labels Section
-            Section(header: Text("Labels").font(.headline)) {
-                Text("Set your preferences for product labels.")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                ForEach(foodPreferenceVM.preferences.labels.keys.sorted(), id: \.self) { key in
-                    PreferencePicker(title: key, selection: Binding(
-                        get: { foodPreferenceVM.preferences.labels[key] ?? .notImportant },
-                        set: { foodPreferenceVM.preferences.labels[key] = $0 }
-                    ))
-                }
-            }
-            
-            // Environment Section
-            Section(header: Text("Environment").font(.headline)) {
-                Text("Set your preferences for environmental impact.")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                
-                PreferencePicker(title: "Low environmental impact (Eco-Score)", selection: $foodPreferenceVM.preferences.lowEnvironmentalImpact)
-//                PreferencePicker(title: "Low risk of deforestation (Forest footprint)", selection: $foodPreferenceVM.preferences.lowRiskOfDeforestation)
+                .foregroundColor(.red)
             }
         }
-        .navigationTitle("Edit Preferences")
+        .navigationTitle("Food Preferences")
         .onAppear {
-            foodPreferenceVM.loadPreferences()
-        }
-        .onDisappear {
-            foodPreferenceVM.savePreferences()
+            loadSelectedCategories()
         }
     }
-}
-
-struct PreferencePicker: View {
-    var title: String
-    @Binding var selection: ImportanceLevel
     
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(title)
-                .font(.subheadline)
-                .foregroundColor(.primary)
-            Picker(title, selection: $selection) {
-                ForEach(ImportanceLevel.allCases) { level in
-                    Text(level.description).tag(level)
-                }
+    private func togglePreference(category: String, isEnabled: Bool) {
+        if let existingPreference = preferences.first(where: { $0.category == category }) {
+            if isEnabled {
+                existingPreference.isEnabled = true
+            } else {
+                modelContext.delete(existingPreference)
             }
-            .pickerStyle(SegmentedPickerStyle())
+        } else if isEnabled {
+            let newPreference = UserPreference(category: category, isEnabled: true)
+            modelContext.insert(newPreference)
         }
-        .padding(.vertical, 4)
+    }
+    
+    private func clearAllPreferences() {
+        for preference in preferences {
+            modelContext.delete(preference)
+        }
+    }
+    
+    private func loadSelectedCategories() {
+        selectedCategories = Set(preferences.filter { $0.isEnabled }.map { $0.category })
     }
 }
 
 #Preview {
     FoodPreferencesView()
-        .environmentObject(FoodPreferenceViewModel())
 }

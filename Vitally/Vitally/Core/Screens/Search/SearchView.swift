@@ -14,21 +14,7 @@ struct SearchView: View {
                 } else {
                     List {
                         ForEach(viewModel.products) { product in
-                            SearchCatagoryRowView(
-                                imageName: product.imageURL ?? "",
-                                imageSize: 60,
-                                productName: product.productName,
-                                brands: product.brands,
-                                nutritionGrades: product.nutritionGrades
-                            )
-                            .padding(.vertical, 8)
-                            .onAppear {
-                                if product == viewModel.products.last && viewModel.canLoadMore {
-                                    Task {
-                                        await viewModel.performSearch()
-                                    }
-                                }
-                            }
+                            productRow(for: product)
                         }
                         if viewModel.isLoading && !viewModel.products.isEmpty {
                             ProgressView()
@@ -41,6 +27,29 @@ struct SearchView: View {
             }
             .navigationTitle("Product Search")
             .searchable(text: $viewModel.searchTerm, placement: .navigationBarDrawer(displayMode: .always))
+        }
+    }
+    
+    @ViewBuilder
+    private func productRow(for product: SearchResultProduct) -> some View {
+        SearchCatagoryRowView(
+            imageName: product.imageURL ?? "",
+            imageSize: 60,
+            productName: product.productName,
+            brands: product.brands,
+            nutritionGrades: product.nutritionGrades
+        )
+        .padding(.vertical, 8)
+        .onAppear {
+            loadMoreIfNeeded(for: product)
+        }
+    }
+    
+    private func loadMoreIfNeeded(for product: SearchResultProduct) {
+        if product == viewModel.products.last && viewModel.canLoadMore {
+            Task {
+                await viewModel.performSearch()
+            }
         }
     }
 }

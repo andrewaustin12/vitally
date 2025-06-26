@@ -16,11 +16,11 @@ struct SearchProductDetailsView: View {
                 }
             }
             
-            Text(product.productName)
+            Text(product.displayName)
                 .font(.title)
                 .fontWeight(.bold)
             
-            Text(product.brands)
+            Text(product.displayBrands)
                 .font(.headline)
                 .foregroundColor(.gray)
             
@@ -44,8 +44,4 @@ struct SearchProductDetailsView: View {
 
 #Preview {
     SearchProductDetailsView(product: Product.mockProduct)
-        .environmentObject(AuthViewModel())
-        .environmentObject(HistoryViewModel())
-        .environmentObject(FoodPreferenceViewModel())
-        .environmentObject(ProductDetailsViewModel())
 }

@@ -4,7 +4,7 @@ import Foundation
 // Define the root structure of the API response
 struct APIResponse: Codable {
     let code: String
-    let product: Product
+    let product: Product?
     let status: Int
     let statusVerbose: String
 
@@ -27,10 +27,25 @@ struct Product: Codable, Identifiable, Equatable {
     let allergens: String?
     let ingredients: String? // Add ingredients
     let labels: [String]? // Add labels
-    let nutritionGrades, productName, brands: String
+    let nutritionGrades: String?
+    let productName: String?
+    let brands: String?
     let additives: [String]?
     let vitamins: [String]?
     var timestamp: Date?
+    
+    // Computed properties for display with fallbacks
+    var displayName: String {
+        return productName ?? "Unknown Product"
+    }
+    
+    var displayBrands: String {
+        return brands ?? "Unknown Brand"
+    }
+    
+    var displayNutritionGrades: String {
+        return nutritionGrades ?? "unknown"
+    }
     
     static func ==(lhs: Product, rhs: Product) -> Bool {
             return lhs.id == rhs.id

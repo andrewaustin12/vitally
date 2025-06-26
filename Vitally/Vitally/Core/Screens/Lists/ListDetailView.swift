@@ -1,24 +1,30 @@
 import SwiftUI
+import SwiftData
 
 struct ListDetailView: View {
-    @EnvironmentObject var listViewModel: ListViewModel
-    var list: FoodList
+    @Environment(\.modelContext) private var modelContext
+    var list: UserList
     var imageSize: CGFloat = 65
 
-    var uniqueProducts: [Product] {
+    var uniqueItems: [UserHistory] {
         var seen = Set<String>()
-        return list.items.filter { product in
-            guard !seen.contains(product.id) else { return false }
-            seen.insert(product.id)
-            return true
+        var uniqueItems = [UserHistory]()
+        
+        for item in list.items {
+            if !seen.contains(item.id) {
+                seen.insert(item.id)
+                uniqueItems.append(item)
+            }
         }
+        
+        return uniqueItems
     }
 
     var averageMatchScore: Double {
-        let totalScore = uniqueProducts.reduce(0.0) { sum, product in
-            sum + Double(calculateMatchScore(for: product))
+        let totalScore = uniqueItems.reduce(0.0) { sum, item in
+            sum + Double(calculateMatchScore(for: item))
         }
-        return uniqueProducts.isEmpty ? 0.0 : totalScore / Double(uniqueProducts.count)
+        return uniqueItems.isEmpty ? 0.0 : totalScore / Double(uniqueItems.count)
     }
 
     var body: some View {
@@ -32,18 +38,18 @@ struct ListDetailView: View {
                         MatchPercentageView(percentage: Int(averageMatchScore), description: "Match with your food preferences")
                     }
                 } 
-                ForEach(uniqueProducts) { product in
-                    NavigationLink(destination: ProductDetailsView(product: product)) {
+                ForEach(uniqueItems, id: \.id) { item in
+                    NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(item))) {
                         HStack {
-                            ImageLoaderView(urlString: product.imageURL)
+                            ImageLoaderView(urlString: item.imageURL)
                                 .frame(width: imageSize, height: imageSize)
                                 .cornerRadius(8)
                             VStack(alignment: .leading) {
-                                Text(product.productName)
+                                Text(item.productName)
                                     .font(.headline)
-                                Text(product.brands)
+                                Text(item.productBrand)
                                     .font(.subheadline)
-                                Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
+                                Text("Nutri-Score: \(item.nutritionGrade.capitalized)")
                                     .font(.callout)
                             }
                         }
@@ -68,28 +74,88 @@ struct ListDetailView: View {
 
     private func removeItems(at offsets: IndexSet) {
         offsets.forEach { index in
-            let product = list.items[index]
-            listViewModel.removeItem(from: list.id, product: product)
+            let item = uniqueItems[index]
+            // Remove the specific item by its unique id
+            list.items.removeAll { $0.id == item.id }
+            list.updateLastModified()
         }
     }
+    
+    private func createProductFromHistory(_ historyItem: UserHistory) -> Product {
+        return Product(
+            code: historyItem.barcode,
+            imageURL: historyItem.imageURL,
+            nutriments: Nutriments(
+                carbohydrates: nil,
+                carbohydrates100G: nil,
+                carbohydratesUnit: nil,
+                carbohydratesValue: nil,
+                energy: nil,
+                energyKcal: nil,
+                energyKcal100G: nil,
+                energyKcalUnit: nil,
+                energyKcalValue: nil,
+                energyKcalValueComputed: nil,
+                energy100G: nil,
+                energyUnit: nil,
+                energyValue: nil,
+                fat: nil,
+                fat100G: nil,
+                fatUnit: nil,
+                fatValue: nil,
+                fruitsVegetablesLegumesEstimateFromIngredients100G: nil,
+                fruitsVegetablesLegumesEstimateFromIngredientsServing: nil,
+                fruitsVegetablesNutsEstimateFromIngredients100G: nil,
+                fruitsVegetablesNutsEstimateFromIngredientsServing: nil,
+                novaGroup: nil,
+                novaGroup100G: nil,
+                novaGroupServing: nil,
+                nutritionScoreFr: nil,
+                nutritionScoreFr100G: nil,
+                proteins: nil,
+                proteins100G: nil,
+                proteinsUnit: nil,
+                proteinsValue: nil,
+                salt: nil,
+                salt100G: nil,
+                saltUnit: nil,
+                saltValue: nil,
+                saturatedFat: nil,
+                saturatedFat100G: nil,
+                saturatedFatUnit: nil,
+                saturatedFatValue: nil,
+                sodium: nil,
+                sodium100G: nil,
+                sodiumUnit: nil,
+                sodiumValue: nil,
+                sugars: nil,
+                sugars100G: nil,
+                sugarsUnit: nil,
+                sugarsValue: nil
+            ),
+            nutriscoreData: nil,
+            ecoscoreGrade: nil,
+            ecoscoreScore: nil,
+            allergens: nil,
+            ingredients: nil,
+            labels: nil,
+            nutritionGrades: historyItem.nutritionGrade,
+            productName: historyItem.productName,
+            brands: historyItem.productBrand,
+            additives: nil,
+            vitamins: nil,
+            timestamp: historyItem.timestamp
+        )
+    }
 
-    private func calculateMatchScore(for product: Product) -> Int {
+    private func calculateMatchScore(for item: UserHistory) -> Int {
         var totalScore = 0
         
         // Nutritional Quality - 60%
-        if let nutriScore = product.nutriscoreData?.grade {
-            totalScore += calculateNutriScoreGrade(nutriScore) * 60 / 100
-        }
+        totalScore += calculateNutriScoreGrade(item.nutritionGrade) * 60 / 100
         
-        // Food Processing (NOVA) - 30%
-        if let novaGroup = product.nutriments.novaGroup {
-            totalScore += calculateNovaScore(Int(novaGroup)) * 30 / 100
-        }
-        
-        // Environmental Impact (Eco-Score) - 10%
-        if let ecoScore = product.ecoscoreGrade {
-            totalScore += calculateEcoScore(ecoScore) * 10 / 100
-        }
+        // For now, we'll use a default score since we don't have full product data
+        totalScore += 50 * 40 / 100 // Default score for other factors
         
         return totalScore
     }
@@ -146,7 +212,6 @@ struct ListDetailView: View {
 
 struct ListDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ListDetailView(list: FoodList(id: "1", name: "Sample List", items: [Product.mockProduct]))
-            .environmentObject(ListViewModel())
+        ListDetailView(list: UserList(name: "Sample List"))
     }
 }

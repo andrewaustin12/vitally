@@ -47,13 +47,10 @@ struct NutrientView: View {
     }
 }
 
-#Preview {
-    Group {
-        NutrientView(name: "proteins", value: "5 g", isPositive: true)
-            .previewDisplayName("Positive Nutrient")
+#Preview("Positive Nutrient") {
+    NutrientView(name: "proteins", value: "5 g", isPositive: true)
+}
 
-        NutrientView(name: "sugar", value: "10 g", isPositive: false)
-            .previewDisplayName("Negative Nutrient")
-    }
-    .previewLayout(.sizeThatFits)
+#Preview("Negative Nutrient") {
+    NutrientView(name: "sugar", value: "10 g", isPositive: false)
 }

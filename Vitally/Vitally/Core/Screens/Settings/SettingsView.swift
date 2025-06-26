@@ -7,18 +7,14 @@
 
 import SwiftUI
 
-
 struct SettingsView: View {
-    @EnvironmentObject var viewModel: AuthViewModel
-    @State private var isSigningOut = false
-    @State private var isDeletingAccount = false // Add this state variable
+    @State private var isClearingData = false
     @State private var initials = "AA"
-    @State private var username = "Andy"
-    @State private var email = "andy@test.com"
+    @State private var username = "User"
+    @State private var email = "user@vitally.app"
     
     var body: some View {
         NavigationStack {
-            //if let user = viewModel.currentUser {
             List {
                 Section {
                     HStack {
@@ -27,7 +23,7 @@ struct SettingsView: View {
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .frame(width: 72, height: 72)
-                            .background(Color(.systemGray3))
+                            .background(Color(.systemTeal))
                             .clipShape(Circle())
                         
                         VStack(alignment: .leading, spacing: 4) {
@@ -64,44 +60,23 @@ struct SettingsView: View {
                     
                 }
                 
-                Section("Account") {
+                Section("Data") {
                     
                     Button {
-                        isSigningOut = true
+                        isClearingData = true
                     } label: {
-                        SettingsRowView(imageName: "person.crop.circle.badge.xmark", title: "Sign out", tintColor: .blue)
+                        SettingsRowView(imageName: "trash", title: "Clear All Data", tintColor: .red)
                     }
-                    .alert("Sign Out", isPresented: $isSigningOut) {
+                    .alert("Clear All Data", isPresented: $isClearingData) {
                         Button("Cancel", role: .cancel) { }
-                        Button("Sign Out", role: .destructive) {
-                            viewModel.signOut()
+                        Button("Clear All", role: .destructive) {
+                            // TODO: Implement clear all data functionality
                         }
                     } message: {
-                        Text("Are you sure you want to sign out?")
-                    }
-                    
-                    
-                    
-                    Button {
-                        isDeletingAccount = true
-                    } label: {
-                        SettingsRowView(imageName: "xmark.circle.fill", title: "Delete Account", tintColor: .red)
+                        Text("This will delete all your history, lists, and preferences. This action cannot be undone.")
                     }
                 }
             }
-            .alert(isPresented: $isDeletingAccount) {
-                Alert(
-                    title: Text("Delete Account?"),
-                    message: Text("This will delete the user and all of its data. Are you sure you want to continue?"),
-                    primaryButton: .default(Text("Confirm")) {
-                        Task {
-                            await viewModel.deleteUser()
-                        }
-                    },
-                    secondaryButton: .cancel(Text("Cancel"))
-                )
-            }
-            //}
         }
     }
 }
@@ -109,6 +84,5 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
-            .environmentObject(AuthViewModel())
     }
 }

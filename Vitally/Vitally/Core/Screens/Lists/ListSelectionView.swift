@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct ListSelectionView: View {
-    @EnvironmentObject var listViewModel: ListViewModel
+    @Query(sort: \UserList.lastModified, order: .reverse) private var lists: [UserList]
+    @Environment(\.modelContext) private var modelContext
     var product: Product
     
     @State private var showAlert = false
@@ -11,10 +13,10 @@ struct ListSelectionView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(listViewModel.lists) { list in
+                ForEach(lists) { list in
                     Button(action: {
-                        listViewModel.addItem(to: list.id, product: product)
-                        alertMessage = "\(product.productName) added to \(list.name)"
+                        addItemToList(list: list, product: product)
+                        alertMessage = "\(product.displayName) added to \(list.name)"
                         showAlert = true
                     }) {
                         HStack {
@@ -23,16 +25,13 @@ struct ListSelectionView: View {
                         }
                     }
                 }
-                if listViewModel.lists.isEmpty {
+                if lists.isEmpty {
                     Text("Please create a list")
                         .foregroundColor(.gray)
                         .padding()
                 }
             }
             .navigationTitle("Select a List")
-            .onAppear {
-                listViewModel.fetchLists()
-            }
             .alert(isPresented: $showAlert) {
                 Alert(
                     title: Text("Item Added"),
@@ -44,9 +43,14 @@ struct ListSelectionView: View {
             }
         }
     }
+    
+    private func addItemToList(list: UserList, product: Product) {
+        let historyItem = UserHistory(product: product)
+        list.items.append(historyItem)
+        list.updateLastModified()
+    }
 }
 
 #Preview {
     ListSelectionView(product: Product.mockProduct)
-        .environmentObject(ListViewModel())
 }

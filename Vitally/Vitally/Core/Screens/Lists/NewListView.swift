@@ -1,9 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct NewListView: View {
     @Binding var isPresented: Bool
     @State private var newListName: String = ""
-    @EnvironmentObject var listVM: ListViewModel
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationStack {
@@ -21,7 +22,7 @@ struct NewListView: View {
                 
                 Button(action: {
                     if !newListName.isEmpty {
-                        listVM.createList(name: newListName)
+                        createList(name: newListName)
                         newListName = ""
                         isPresented = false
                     }
@@ -52,11 +53,15 @@ struct NewListView: View {
             }
         }
     }
+    
+    private func createList(name: String) {
+        let list = UserList(name: name)
+        modelContext.insert(list)
+    }
 }
 
 struct NewListView_Previews: PreviewProvider {
     static var previews: some View {
         NewListView(isPresented: .constant(true))
-            .environmentObject(ListViewModel())
     }
 }
