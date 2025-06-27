@@ -3,6 +3,7 @@ import SwiftData
 
 struct ListDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var foodProductVM: FoodProductViewModel
     var list: UserList
     var imageSize: CGFloat = 65
     
@@ -33,12 +34,43 @@ struct ListDetailView: View {
         VStack {
             List {
                 Section{
-                    HStack{
-                        Text("Your list score: ")
-                            .font(.title)
-                        MatchPercentageView(percentage: Int(averageMatchScore), description: "Match with your food preferences")
+                    VStack(spacing: 12) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("List Score")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Text("Based on \(uniqueItems.count) items")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            MatchPercentageView(percentage: Int(averageMatchScore), description: "Match with your food preferences")
+                        }
+                        
+                        // Score breakdown
+                        if !uniqueItems.isEmpty {
+                            HStack(spacing: 24) {
+                                ScoreBreakdownItem(
+                                    title: "Nutrition",
+                                    score: calculateAverageNutriScore(),
+                                    color: scoreColor(for: calculateAverageNutriScore())
+                                )
+                                ScoreBreakdownItem(
+                                    title: "Processing",
+                                    score: calculateAverageNovaScore(),
+                                    color: scoreColor(for: calculateAverageNovaScore())
+                                )
+                                ScoreBreakdownItem(
+                                    title: "Environment",
+                                    score: calculateAverageEcoScore(),
+                                    color: scoreColor(for: calculateAverageEcoScore())
+                                )
+                            }
+                        }
                     }
-                } 
+                    .padding(.vertical, 8)
+                }
                 
                 if uniqueItems.isEmpty {
                     Section {
@@ -61,7 +93,7 @@ struct ListDetailView: View {
                     }
                 } else {
                     ForEach(uniqueItems, id: \.id) { item in
-                        NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(item))) {
+                        NavigationLink(destination: ProductDetailsView(product: foodProductVM.createProductFromHistory(item))) {
                             HStack {
                                 ImageLoaderView(urlString: item.imageURL)
                                     .frame(width: imageSize, height: imageSize)
@@ -107,123 +139,42 @@ struct ListDetailView: View {
             list.updateLastModified()
         }
     }
-    
-    private func createProductFromHistory(_ historyItem: UserHistory) -> Product {
-        return Product(
-            code: historyItem.barcode,
-            imageURL: historyItem.imageURL,
-            nutriments: Nutriments(
-                carbohydrates: historyItem.carbohydrates,
-                carbohydrates100G: historyItem.carbohydrates100G,
-                carbohydratesUnit: nil,
-                carbohydratesValue: historyItem.carbohydrates,
-                energy: historyItem.energyKcal,
-                energyKcal: historyItem.energyKcal,
-                energyKcal100G: historyItem.energyKcal100G,
-                energyKcalUnit: nil,
-                energyKcalValue: historyItem.energyKcal,
-                energyKcalValueComputed: historyItem.energyKcal,
-                energy100G: historyItem.energyKcal100G,
-                energyUnit: nil,
-                energyValue: historyItem.energyKcal,
-                fat: historyItem.fat,
-                fat100G: historyItem.fat100G,
-                fatUnit: nil,
-                fatValue: historyItem.fat,
-                fruitsVegetablesLegumesEstimateFromIngredients100G: nil,
-                fruitsVegetablesLegumesEstimateFromIngredientsServing: nil,
-                fruitsVegetablesNutsEstimateFromIngredients100G: nil,
-                fruitsVegetablesNutsEstimateFromIngredientsServing: nil,
-                novaGroup: historyItem.novaGroup,
-                novaGroup100G: historyItem.novaGroup,
-                novaGroupServing: historyItem.novaGroup,
-                nutritionScoreFr: nil,
-                nutritionScoreFr100G: nil,
-                proteins: historyItem.proteins,
-                proteins100G: historyItem.proteins100G,
-                proteinsUnit: nil,
-                proteinsValue: historyItem.proteins,
-                salt: historyItem.salt,
-                salt100G: historyItem.salt100G,
-                saltUnit: nil,
-                saltValue: historyItem.salt,
-                saturatedFat: historyItem.saturatedFat,
-                saturatedFat100G: historyItem.saturatedFat100G,
-                saturatedFatUnit: nil,
-                saturatedFatValue: historyItem.saturatedFat,
-                sodium: historyItem.sodium,
-                sodium100G: historyItem.sodium100G,
-                sodiumUnit: nil,
-                sodiumValue: historyItem.sodium,
-                sugars: historyItem.sugars,
-                sugars100G: historyItem.sugars100G,
-                sugarsUnit: nil,
-                sugarsValue: historyItem.sugars
-            ),
-            nutriscoreData: createNutriscoreData(from: historyItem),
-            ecoscoreGrade: historyItem.ecoscoreGrade,
-            ecoscoreScore: historyItem.ecoscoreScore,
-            allergens: historyItem.allergens,
-            ingredients: historyItem.ingredients,
-            labels: historyItem.labels,
-            nutritionGrades: historyItem.nutritionGrade,
-            productName: historyItem.productName,
-            brands: historyItem.productBrand,
-            additives: historyItem.additives,
-            vitamins: historyItem.vitamins,
-            timestamp: historyItem.timestamp
-        )
-    }
-    
-    private func createNutriscoreData(from historyItem: UserHistory) -> NutriscoreData? {
-        guard let grade = historyItem.nutriscoreGrade,
-              let score = historyItem.nutriscoreScore else {
-            return nil
-        }
-        
-        return NutriscoreData(
-            energy: historyItem.nutriscoreEnergy ?? 0,
-            energyPoints: historyItem.nutriscoreEnergyPoints ?? 0,
-            energyValue: historyItem.nutriscoreEnergy ?? 0,
-            fiber: historyItem.nutriscoreFiber ?? 0,
-            fiberPoints: historyItem.nutriscoreFiberPoints ?? 0,
-            fiberValue: historyItem.nutriscoreFiber ?? 0,
-            fruitsVegetablesNutsColzaWalnutOliveOils: historyItem.nutriscoreFruitsVegetablesNuts ?? 0,
-            fruitsVegetablesNutsColzaWalnutOliveOilsPoints: historyItem.nutriscoreFruitsVegetablesNutsPoints ?? 0,
-            fruitsVegetablesNutsColzaWalnutOliveOilsValue: historyItem.nutriscoreFruitsVegetablesNuts ?? 0,
-            grade: grade,
-            isBeverage: 0,
-            isCheese: 0,
-            isFat: 0,
-            isWater: 0,
-            negativePoints: historyItem.nutriscoreNegativePoints ?? 0,
-            positivePoints: historyItem.nutriscorePositivePoints ?? 0,
-            proteins: historyItem.nutriscoreProteins ?? 0,
-            proteinsPoints: historyItem.nutriscoreProteinsPoints ?? 0,
-            proteinsValue: historyItem.nutriscoreProteins ?? 0,
-            saturatedFat: historyItem.nutriscoreSaturatedFat ?? 0,
-            saturatedFatPoints: historyItem.nutriscoreSaturatedFatPoints ?? 0,
-            saturatedFatValue: historyItem.nutriscoreSaturatedFat ?? 0,
-            score: score,
-            sodium: historyItem.nutriscoreSodium ?? 0,
-            sodiumPoints: historyItem.nutriscoreSodiumPoints ?? 0,
-            sodiumValue: historyItem.nutriscoreSodium ?? 0,
-            sugars: historyItem.nutriscoreSugars ?? 0,
-            sugarsPoints: historyItem.nutriscoreSugarsPoints ?? 0,
-            sugarsValue: historyItem.nutriscoreSugars ?? 0
-        )
-    }
 
     private func calculateMatchScore(for item: UserHistory) -> Int {
         var totalScore = 0
+        var weightSum = 0
         
-        // Nutritional Quality - 60%
-        totalScore += calculateNutriScoreGrade(item.nutritionGrade) * 60 / 100
+        // Nutritional Quality - 40%
+        let nutriScore = calculateNutriScoreGrade(item.nutritionGrade)
+        totalScore += nutriScore * 40
+        weightSum += 40
         
-        // For now, we'll use a default score since we don't have full product data
-        totalScore += 50 * 40 / 100 // Default score for other factors
+        // NOVA Group - 30%
+        if let novaGroup = item.novaGroup {
+            let novaScore = calculateNovaScore(Int(novaGroup))
+            totalScore += novaScore * 30
+            weightSum += 30
+        }
         
-        return totalScore
+        // Eco Score - 20%
+        if let ecoscoreGrade = item.ecoscoreGrade {
+            let ecoScore = calculateEcoScore(ecoscoreGrade)
+            totalScore += ecoScore * 20
+            weightSum += 20
+        }
+        
+        // Allergen Safety - 10%
+        let allergenScore = calculateAllergenScore(for: item)
+        totalScore += allergenScore * 10
+        weightSum += 10
+        
+        return weightSum > 0 ? totalScore / weightSum : 0
+    }
+    
+    private func calculateAllergenScore(for item: UserHistory) -> Int {
+        // This would be enhanced based on user's allergen preferences
+        // For now, return a neutral score
+        return 50
     }
 
     private func calculateNutriScoreGrade(_ grade: String) -> Int {
@@ -274,6 +225,82 @@ struct ListDetailView: View {
             return 0
         }
     }
+
+    private func calculateAverageNutriScore() -> Double {
+        let totalScore = uniqueItems.reduce(0.0) { sum, item in
+            sum + Double(calculateNutriScoreGrade(item.nutritionGrade))
+        }
+        return uniqueItems.isEmpty ? 0.0 : totalScore / Double(uniqueItems.count)
+    }
+
+    private func calculateAverageNovaScore() -> Double {
+        let itemsWithNova = uniqueItems.filter { $0.novaGroup != nil }
+        if itemsWithNova.isEmpty { return 0.0 }
+        
+        let totalScore = itemsWithNova.reduce(0.0) { sum, item in
+            sum + Double(calculateNovaScore(Int(item.novaGroup!)))
+        }
+        return totalScore / Double(itemsWithNova.count)
+    }
+
+    private func calculateAverageEcoScore() -> Double {
+        let itemsWithEco = uniqueItems.filter { $0.ecoscoreGrade != nil }
+        if itemsWithEco.isEmpty { return 0.0 }
+        
+        let totalScore = itemsWithEco.reduce(0.0) { sum, item in
+            sum + Double(calculateEcoScore(item.ecoscoreGrade!))
+        }
+        return totalScore / Double(itemsWithEco.count)
+    }
+
+    private func scoreColor(for score: Double) -> Color {
+        if score >= 80 {
+            return .green
+        } else if score >= 60 {
+            return .yellow
+        } else {
+            return .red
+        }
+    }
+}
+
+// MARK: - Supporting Views
+
+struct ScoreBreakdownItem: View {
+    let title: String
+    let score: Double
+    let color: Color
+    
+    var body: some View {
+        VStack(spacing: 6) {
+            Text(title)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
+                .lineLimit(1)
+            
+            ZStack {
+                // Background circle
+                Circle()
+                    .stroke(color.opacity(0.2), lineWidth: 4)
+                    .frame(width: 44, height: 44)
+                
+                // Progress circle
+                Circle()
+                    .trim(from: 0, to: score / 100)
+                    .stroke(color, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                    .frame(width: 44, height: 44)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeInOut(duration: 0.8), value: score)
+                
+                // Score text
+                Text("\(Int(score))")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(color)
+            }
+        }
+    }
 }
 
 struct AddToListView: View {
@@ -303,6 +330,59 @@ struct AddToListView: View {
 
 struct ListDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ListDetailView(list: UserList(name: "Sample List"))
+        NavigationView {
+            ListDetailView(list: createSampleList())
+                .environmentObject(FoodProductViewModel())
+        }
+    }
+    
+    static func createSampleList() -> UserList {
+        let list = UserList(name: "Healthy Groceries")
+        
+        // Sample items with different scores
+        let sampleItems = [
+            createSampleHistoryItem(
+                name: "Organic Bananas",
+                brand: "Fresh Market",
+                nutritionGrade: "A",
+                novaGroup: 1,
+                ecoscoreGrade: "A"
+            ),
+            createSampleHistoryItem(
+                name: "Greek Yogurt",
+                brand: "Chobani",
+                nutritionGrade: "B",
+                novaGroup: 2,
+                ecoscoreGrade: "B"
+            ),
+            createSampleHistoryItem(
+                name: "Whole Grain Bread",
+                brand: "Nature's Own",
+                nutritionGrade: "B",
+                novaGroup: 3,
+                ecoscoreGrade: "C"
+            ),
+            createSampleHistoryItem(
+                name: "Dark Chocolate",
+                brand: "Lindt",
+                nutritionGrade: "C",
+                novaGroup: 4,
+                ecoscoreGrade: "D"
+            )
+        ]
+        
+        list.items = sampleItems
+        return list
+    }
+    
+    static func createSampleHistoryItem(name: String, brand: String, nutritionGrade: String, novaGroup: Int, ecoscoreGrade: String) -> UserHistory {
+        let history = UserHistory(product: Product.mockProduct)
+        history.id = UUID().uuidString // Ensure unique ID
+        history.productName = name
+        history.productBrand = brand
+        history.nutritionGrade = nutritionGrade
+        history.novaGroup = Double(novaGroup)
+        history.ecoscoreGrade = ecoscoreGrade
+        return history
     }
 }

@@ -282,33 +282,33 @@ struct ProductDetailsView: View {
                 MacroCard(
                     title: "Calories",
                     value: product.nutriments.energyKcal ?? 0,
-                    unit: "kcal",
                     color: .orange,
-                    icon: "flame.fill"
+                    icon: "flame.fill",
+                    dailyRecommended: 2000
                 )
                 
                 MacroCard(
                     title: "Protein",
                     value: product.nutriments.proteins ?? 0,
-                    unit: "g",
                     color: .blue,
-                    icon: "dumbbell.fill"
+                    icon: "dumbbell.fill",
+                    dailyRecommended: 50
                 )
                 
                 MacroCard(
                     title: "Carbs",
                     value: product.nutriments.carbohydrates ?? 0,
-                    unit: "g",
                     color: .green,
-                    icon: "leaf.fill"
+                    icon: "leaf.fill",
+                    dailyRecommended: 130
                 )
                 
                 MacroCard(
                     title: "Fat",
                     value: product.nutriments.fat ?? 0,
-                    unit: "g",
                     color: .red,
-                    icon: "drop.fill"
+                    icon: "drop.fill",
+                    dailyRecommended: 65
                 )
             }
         }
