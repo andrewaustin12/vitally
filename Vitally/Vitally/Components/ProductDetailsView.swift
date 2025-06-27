@@ -1,4 +1,5 @@
 import SwiftUI
+// import NutriScoreSheetView, NovaScoreSheetView, EcoScoreSheetView
 
 struct ProductDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -12,12 +13,18 @@ struct ProductDetailsView: View {
     @State private var isPositivesExpanded = true
     @State private var isNegativesExpanded = true
     @State private var showAddToListSheet = false
+    @State private var infoAlert: InfoAlertType?
     
     private let positiveIngredients: [String] = ["fiber", "proteins", "vitamins", "mineral", "omega-3", "antioxidant"]
     private let negativeIngredients: [String] = ["sugars", "salt", "saturated fat", "trans fat", "artificial", "preservative", "coloring"]
     
     enum NutrientType {
         case energy, proteins, carbohydrates, fats, saturatedFat, sugars, salt, sodium, fiber, fruitsVegetablesNuts
+    }
+    
+    enum InfoAlertType: Identifiable {
+        case nutri, nova, eco
+        var id: Self { self }
     }
     
     var body: some View {
@@ -103,6 +110,28 @@ struct ProductDetailsView: View {
             .sheet(isPresented: $showAddToListSheet) {
                 ListSelectionView(product: product)
             }
+            .alert(item: $infoAlert) { alert in
+                switch alert {
+                case .nutri:
+                    return Alert(
+                        title: Text("About Nutri-Score"),
+                        message: Text("Nutri-Score is a nutrition label that ranks food from A (best) to E (worst) based on nutritional quality. It helps you make healthier choices at a glance.\n\nWhy it matters: Nutri-Score makes it easy to compare products and choose healthier options quickly."),
+                        dismissButton: .default(Text("Close"))
+                    )
+                case .nova:
+                    return Alert(
+                        title: Text("About NOVA"),
+                        message: Text("NOVA classifies foods by their level of processing, from 1 (unprocessed) to 4 (ultra-processed). Lower is better for health.\n\nWhy it matters: Highly processed foods are often less healthy. NOVA helps you spot and avoid them."),
+                        dismissButton: .default(Text("Close"))
+                    )
+                case .eco:
+                    return Alert(
+                        title: Text("About Eco-Score"),
+                        message: Text("Eco-Score rates the environmental impact of food from A (best) to E (worst). Lower impact is better for the planet.\n\nWhy it matters: Eco-Score helps you make choices that are better for the environment."),
+                        dismissButton: .default(Text("Close"))
+                    )
+                }
+            }
         }
     }
     
@@ -133,9 +162,13 @@ struct ProductDetailsView: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 8) {
                 VStack(alignment: .leading) {
-                    Text("Nutri-Score: \(product.displayNutritionGrades.capitalized)")
-                        .font(.title3)
-                        .fontWeight(.bold)
+                    HStack(spacing: 4) {
+                        Text("Nutri-Score: \(product.displayNutritionGrades.capitalized)")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                        Image(systemName: "info.circle")
+                            .onTapGesture { infoAlert = .nutri }
+                    }
                     Text(nutriScoreDescription(for: String(product.displayNutritionGrades.capitalized)))
                         .font(.subheadline)
                         .foregroundColor(.gray)
@@ -151,9 +184,13 @@ struct ProductDetailsView: View {
             
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text("NOVA: \(Int(product.nutriments.novaGroup ?? 0))")
-                        .font(.title3)
-                        .fontWeight(.bold)
+                    HStack(spacing: 4) {
+                        Text("NOVA: \(Int(product.nutriments.novaGroup ?? 0))")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                        Image(systemName: "info.circle")
+                            .onTapGesture { infoAlert = .nova }
+                    }
                     Text(novaGroupDescription(for: Int(product.nutriments.novaGroup ?? 0)))
                         .font(.subheadline)
                         .foregroundColor(.gray)
@@ -168,9 +205,13 @@ struct ProductDetailsView: View {
             
             HStack(spacing: 16) {
                 VStack(alignment: .leading) {
-                    Text("Eco-Score: \(product.ecoscoreGrade?.capitalized ?? "N/A")")
-                        .font(.title3)
-                        .fontWeight(.bold)
+                    HStack(spacing: 4) {
+                        Text("Eco-Score: \(product.ecoscoreGrade?.capitalized ?? "N/A")")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                        Image(systemName: "info.circle")
+                            .onTapGesture { infoAlert = .eco }
+                    }
                     Text(ecoScoreDescription(for: product.ecoscoreGrade))
                         .font(.subheadline)
                         .foregroundColor(.gray)
@@ -363,26 +404,32 @@ struct ProductDetailsView: View {
     }
     
     private func calculateMatchScore() {
-        var totalScore = 0
-        
-        // Nutritional Quality - 60%
+        var totalScore: Double = 0
+        var totalWeight: Double = 0
+
+        let nutriWeight = 0.6
+        let novaWeight = 0.3
+        let ecoWeight = 0.1
+
         if let nutriScore = product.nutriscoreData?.grade {
-            totalScore += calculateNutriScoreGrade(nutriScore) * 60 / 100
+            totalScore += Double(calculateNutriScoreGrade(nutriScore)) * nutriWeight
+            totalWeight += nutriWeight
         }
-        
-        
-        // Food Processing (NOVA) - 30%
         if let novaGroup = product.nutriments.novaGroup {
-            totalScore += calculateNovaScore(Int(novaGroup)) * 30 / 100
+            totalScore += Double(calculateNovaScore(Int(novaGroup))) * novaWeight
+            totalWeight += novaWeight
         }
-        
-        // Environmental Impact (Eco-Score) - 10%
         if let ecoScore = product.ecoscoreGrade {
-            totalScore += calculateEcoScore(ecoScore) * 10 / 100
+            totalScore += Double(calculateEcoScore(ecoScore)) * ecoWeight
+            totalWeight += ecoWeight
         }
-        
+
+        // If some data is missing, normalize by totalWeight
+        let normalizedScore = totalWeight > 0 ? totalScore / totalWeight : 0
+        let clampedScore = max(0, min(100, Int(round(normalizedScore))))
+
         DispatchQueue.main.async {
-            self.matchScore = totalScore
+            self.matchScore = clampedScore
         }
     }
     
