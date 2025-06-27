@@ -69,16 +69,36 @@ struct HistoryView: View {
     }
 
     private func calculateMatchScore(for historyItem: UserHistory) -> Int {
-        var totalScore = 0
+        var totalScore: Double = 0
+        var totalWeight: Double = 0
+
+        let nutriWeight = 0.6
+        let novaWeight = 0.3
+        let ecoWeight = 0.1
+
+        // Nutritional Score (60% weight)
+        if !historyItem.nutritionGrade.isEmpty {
+            totalScore += Double(calculateNutriScoreGrade(historyItem.nutritionGrade)) * nutriWeight
+            totalWeight += nutriWeight
+        }
         
-        // Nutritional Quality - 60%
-        totalScore += calculateNutriScoreGrade(historyItem.nutritionGrade) * 60 / 100
+        // NOVA Score (30% weight) - if available in history
+        if let novaGroup = historyItem.novaGroup, novaGroup > 0 {
+            totalScore += Double(calculateNovaScore(Int(novaGroup))) * novaWeight
+            totalWeight += novaWeight
+        }
         
-        // For now, we'll use a default score since we don't have full product data
-        // In a real implementation, you might want to store more data in UserHistory
-        totalScore += 50 * 40 / 100 // Default score for other factors
-        
-        return totalScore
+        // Eco Score (10% weight) - if available in history
+        if let ecoScore = historyItem.ecoscoreGrade, !ecoScore.isEmpty {
+            totalScore += Double(calculateEcoScore(ecoScore)) * ecoWeight
+            totalWeight += ecoWeight
+        }
+
+        // If some data is missing, normalize by totalWeight
+        let normalizedScore = totalWeight > 0 ? totalScore / totalWeight : 0
+        let clampedScore = max(0, min(100, Int(round(normalizedScore))))
+
+        return clampedScore
     }
 
     private func calculateNutriScoreGrade(_ grade: String) -> Int {
