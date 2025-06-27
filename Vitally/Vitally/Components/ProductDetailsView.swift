@@ -33,37 +33,51 @@ struct ProductDetailsView: View {
                     }
                 }
                 
+                Section {
+                    DisclosureGroup("Macros & Calories", isExpanded: .constant(true)) {
+                        macrosSection
+                    }
+                }
+                
                 if let allergens = product.allergens, !allergens.isEmpty {
-                    allergenSection(allergens: allergens)
+                    Section {
+                        DisclosureGroup("Allergens", isExpanded: .constant(true)) {
+                            allergenSection(allergens: allergens)
+                        }
+                    }
                 }
                 
                 if let additives = product.additives, !additives.isEmpty {
-                                additivesSection(additives: additives.joined(separator: ", "))
-                            }
+                    Section {
+                        DisclosureGroup("Additives", isExpanded: .constant(true)) {
+                            additivesSection(additives: additives.joined(separator: ", "))
+                        }
+                    }
+                }
                 
                 Section {
                     DisclosureGroup("Positive Nutrients", isExpanded: $isPositivesExpanded) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(getPositiveNutrients(for: product), id: \.0) { nutrient in
-                                NutrientView(name: nutrient.0, value: nutrient.1, isPositive: true)
-                            }
-                        }
+                        positiveNutrientsView
                     }
                 }
                 
                 Section {
                     DisclosureGroup("Negative Nutrients", isExpanded: $isNegativesExpanded) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(getNegativeNutrients(for: product), id: \.0) { nutrient in
-                                NutrientView(name: nutrient.0, value: nutrient.1, isPositive: false)
-                            }
-                        }
+                        negativeNutrientsView
                     }
                 }
                 
                 Section {
-                    DisclosureGroup("Ingredients", isExpanded: $isIngredientsExpanded) { 
+                    DisclosureGroup("Ingredients", isExpanded: $isIngredientsExpanded) {
                         ingredientsSection
+                    }
+                }
+                
+                if let labels = product.labels, !labels.isEmpty {
+                    Section {
+                        DisclosureGroup("Dietary Labels", isExpanded: .constant(true)) {
+                            dietaryLabelsSection(labels: labels)
+                        }
                     }
                 }
                 
@@ -73,7 +87,7 @@ struct ProductDetailsView: View {
             .onAppear {
                 calculateMatchScore()
             }
-            .onChange(of: product) { 
+            .onChange(of: product) {
                 calculateMatchScore()
             }
             .toolbar {
@@ -172,51 +186,145 @@ struct ProductDetailsView: View {
         .padding()
     }
     
+    private var positiveNutrientsView: some View {
+        LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ], spacing: 12) {
+            ForEach(getPositiveNutrients(for: product), id: \.0) { nutrient in
+                PositiveNutrientCard(name: nutrient.0, value: nutrient.1)
+            }
+        }
+    }
+    
+    private var negativeNutrientsView: some View {
+        LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ], spacing: 12) {
+            ForEach(getNegativeNutrients(for: product), id: \.0) { nutrient in
+                NegativeNutrientCard(name: nutrient.0, value: nutrient.1)
+            }
+        }
+    }
+    
     
     private var ingredientsSection: some View {
         if let ingredients = product.ingredients, !ingredients.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(ingredients)
-                    .foregroundColor(.primary)
-                    .padding(.leading, 4)
-            }
+            AnyView(
+                VStack(alignment: .leading, spacing: 12) {
+                    FlowLayout(spacing: 8) {
+                        ForEach(formatIngredientsArray(ingredients), id: \.self) { ingredient in
+                            IngredientChip(ingredient: ingredient)
+                        }
+                    }
+                }
+            )
         } else {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("None Reported")
-                    .font(.headline)
-                    .fontWeight(.medium)
-                    .padding(.leading)
-            }
+            AnyView(
+                HStack {
+                    Image(systemName: "questionmark.circle.fill")
+                        .foregroundColor(.gray)
+                        .font(.title2)
+                    Text("No ingredients information available")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .padding(12)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            )
         }
     }
     
     private func allergenSection(allergens: String) -> some View {
-        Section(header: Text("Allergens").font(.headline)) {
-            HStack {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.red)
-                Text(formattedAllergens(allergens))
-                    .foregroundColor(.primary)
-                    .padding(.leading, 4)
+        VStack(alignment: .leading, spacing: 12) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(formattedAllergensArray(allergens), id: \.self) { allergen in
+                        AllergenChip(allergen: allergen)
+                    }
+                }
             }
-            .padding(8)
-            .background(Color.red.opacity(0.1))
-            .cornerRadius(8)
         }
     }
     
     private func additivesSection(additives: String) -> some View {
-        Section(header: Text("Additives").font(.headline)) {
-            HStack {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundColor(.yellow)
-                Text(additives)
-                    .foregroundColor(.primary)
-                    .padding(.leading, 4)
+        VStack(alignment: .leading, spacing: 12) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(additives.split(separator: ",").map(String.init), id: \.self) { additive in
+                        AdditiveChip(additive: additive.trimmingCharacters(in: .whitespaces))
+                    }
+                }
             }
-            .padding(8)
-            .background(Color.yellow.opacity(0.1))
-            .cornerRadius(8)
+        }
+    }
+
+    private var macrosSection: some View {
+        VStack(spacing: 12) {
+            // Serving size indicator
+            HStack {
+                Image(systemName: "info.circle.fill")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Text("Nutrition per 100g")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+            }
+            .padding(.horizontal, 4)
+            
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 12) {
+                MacroCard(
+                    title: "Calories",
+                    value: product.nutriments.energyKcal ?? 0,
+                    unit: "kcal",
+                    color: .orange,
+                    icon: "flame.fill"
+                )
+                
+                MacroCard(
+                    title: "Protein",
+                    value: product.nutriments.proteins ?? 0,
+                    unit: "g",
+                    color: .blue,
+                    icon: "dumbbell.fill"
+                )
+                
+                MacroCard(
+                    title: "Carbs",
+                    value: product.nutriments.carbohydrates ?? 0,
+                    unit: "g",
+                    color: .green,
+                    icon: "leaf.fill"
+                )
+                
+                MacroCard(
+                    title: "Fat",
+                    value: product.nutriments.fat ?? 0,
+                    unit: "g",
+                    color: .red,
+                    icon: "drop.fill"
+                )
+            }
+        }
+        .padding(.vertical, 8)
+    }
+    
+    private func dietaryLabelsSection(labels: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 8) {
+                ForEach(formatLabels(labels), id: \.self) { label in
+                    DietaryLabelChip(label: label)
+                }
+            }
         }
     }
     
@@ -225,6 +333,33 @@ struct ProductDetailsView: View {
             .split(separator: ",")
             .map { $0.replacingOccurrences(of: "en:", with: "").capitalized }
             .joined(separator: ", ")
+    }
+    
+    func formattedAllergensArray(_ allergens: String) -> [String] {
+        allergens
+            .split(separator: ",")
+            .map { $0.replacingOccurrences(of: "en:", with: "").capitalized.trimmingCharacters(in: .whitespaces) }
+    }
+    
+    func formatIngredientsArray(_ ingredients: String) -> [String] {
+        // Split by common separators and clean up
+        let separators = [",", ".", "(", ")", "and", "&"]
+        var ingredientsList = [ingredients]
+        
+        for separator in separators {
+            ingredientsList = ingredientsList.flatMap { ingredient in
+                ingredient.split(separator: separator)
+                    .map { $0.trimmingCharacters(in: .whitespaces) }
+                    .filter { !$0.isEmpty }
+            }
+        }
+        
+        // Clean up and limit to first 8 ingredients for display
+        return ingredientsList
+            .map { $0.replacingOccurrences(of: "en:", with: "").capitalized }
+            .filter { $0.count > 2 } // Filter out very short strings
+            .prefix(8)
+            .map { $0 }
     }
     
     private func calculateMatchScore() {
@@ -340,7 +475,6 @@ struct ProductDetailsView: View {
             return "Nutri Score unknown"
         }
     }
-
     
     func novaScoreImageName(for group: Int?) -> String {
         guard let group = group else {
@@ -417,41 +551,55 @@ struct ProductDetailsView: View {
     }
     
     func getPositiveNutrients(for product: Product) -> [(String, String)] {
-            var positiveNutrients = [(String, String)]()
-            
-            if let fiber = product.nutriscoreData?.fiber {
-                positiveNutrients.append(("Fiber", "\(fiber) g"))
-            }
-            if let proteins = product.nutriments.proteins {
-                positiveNutrients.append(("Proteins", "\(proteins) g"))
-            }
-            if let vitamins = product.vitamins {
-                for vitamin in vitamins {
-                    positiveNutrients.append(("Vitamins", vitamin))
+        var positiveNutrients = [(String, String)]()
+        
+        // Fiber
+        if let fiber = product.nutriscoreData?.fiber, fiber > 0 {
+            positiveNutrients.append(("fiber", "\(fiber) g"))
+        }
+        // Proteins
+        if let proteins = product.nutriments.proteins, proteins > 0 {
+            positiveNutrients.append(("proteins", "\(proteins) g"))
+        }
+        // Fruits & Vegetables (always show if > 0)
+        if let fruitsVegetables = product.nutriments.fruitsVegetablesNutsEstimateFromIngredients100G, fruitsVegetables > 0 {
+            positiveNutrients.append(("fruitsvegetables", "\(Int(fruitsVegetables)) g"))
+        }
+        // Vitamins/minerals with % daily value (example: vitamin-d_100g_percent)
+        if let vitamins = product.vitamins {
+            for vitamin in vitamins {
+                let key = vitamin.lowercased().replacingOccurrences(of: "-", with: "_")
+                // Try to find a % daily value in nutriments (e.g., vitamin_d_100g_percent)
+                if let percent = product.nutrimentsValuePercent(for: key), percent > 0 {
+                    positiveNutrients.append((vitamin.lowercased(), "\(Int(percent))%"))
                 }
             }
-            
-            return positiveNutrients
         }
+        // TODO: Add minerals if available in API and have %
+        return positiveNutrients
+    }
+    
+    func getNegativeNutrients(for product: Product) -> [(String, String)] {
+        var negativeNutrients = [(String, String)]()
         
-        func getNegativeNutrients(for product: Product) -> [(String, String)] {
-            var negativeNutrients = [(String, String)]()
-            
-            if let sugars = product.nutriments.sugars {
-                negativeNutrients.append(("Sugars", "\(sugars) g"))
-            }
-            if let salt = product.nutriments.salt {
-                negativeNutrients.append(("Salt", "\(salt) g"))
-            }
-            if let saturatedFat = product.nutriments.saturatedFat {
-                negativeNutrients.append(("Saturated Fat", "\(saturatedFat) g"))
-            }
-            if let energy = product.nutriments.energyKcal {
-                negativeNutrients.append(("Energy", "\(energy) kcal"))
-            }
-            
-            return negativeNutrients
+        if let sugars = product.nutriments.sugars, sugars > 0 {
+            negativeNutrients.append(("sugars", "\(sugars) g"))
         }
+        if let salt = product.nutriments.salt, salt > 0 {
+            negativeNutrients.append(("salt", "\(salt) g"))
+        }
+        if let sodium = product.nutriments.sodium, sodium > 0 {
+            negativeNutrients.append(("sodium", "\(sodium) g"))
+        }
+        if let saturatedFat = product.nutriments.saturatedFat, saturatedFat > 0 {
+            negativeNutrients.append(("saturatedfat", "\(saturatedFat) g"))
+        }
+        if let energy = product.nutriments.energyKcal, energy > 0 {
+            negativeNutrients.append(("energy", "\(Int(energy)) kcal"))
+        }
+        // TODO: Add trans fat, cholesterol if available and > 0
+        return negativeNutrients
+    }
     
     func calculateDailyValue(for value: Double, nutrient: NutrientType) -> Int {
         let dailyValues: [NutrientType: Double] = [
@@ -468,6 +616,16 @@ struct ProductDetailsView: View {
         ]
         return Int((value / dailyValues[nutrient]!) * 100)
     }
+    
+    
+    
+    func formatLabels(_ labels: [String]) -> [String] {
+        return labels
+            .map { $0.replacingOccurrences(of: "en:", with: "") }
+            .map { $0.replacingOccurrences(of: "-", with: " ") }
+            .map { $0.capitalized }
+            .filter { !$0.isEmpty }
+    }
 }
 
 struct ProductDetailsView_Previews: PreviewProvider {
@@ -475,3 +633,5 @@ struct ProductDetailsView_Previews: PreviewProvider {
         ProductDetailsView(product: Product.mockProduct)
     }
 }
+
+

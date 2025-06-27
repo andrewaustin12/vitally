@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,8 @@
 		3F9DCBE42BF56E1700E10205 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */; };
 		3F9DCBE62BF56EC000E10205 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE52BF56EC000E10205 /* Search.swift */; };
 		3FA7630B2E0E9EBB00DDA290 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA7630A2E0E9EBB00DDA290 /* ListRowView.swift */; };
+		3FA763322E0EB55400DDA290 /* Product+NutritionHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA763312E0EB55400DDA290 /* Product+NutritionHelpers.swift */; };
+		3FA763342E0EB79500DDA290 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA763332E0EB79500DDA290 /* FlowLayout.swift */; };
 		3FDC5F832BFBB3400029BFE8 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F822BFBB3400029BFE8 /* Scanner.swift */; };
 		3FDC5F852BFD22B20029BFE8 /* FoodPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F842BFD22B20029BFE8 /* FoodPreference.swift */; };
 		3FDC5F892BFD236F0029BFE8 /* FoodPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F882BFD236F0029BFE8 /* FoodPreferencesView.swift */; };
@@ -79,6 +81,8 @@
 		3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		3F9DCBE52BF56EC000E10205 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		3FA7630A2E0E9EBB00DDA290 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
+		3FA763312E0EB55400DDA290 /* Product+NutritionHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Product+NutritionHelpers.swift"; sourceTree = "<group>"; };
+		3FA763332E0EB79500DDA290 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		3FDC5F822BFBB3400029BFE8 /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 		3FDC5F842BFD22B20029BFE8 /* FoodPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPreference.swift; sourceTree = "<group>"; };
 		3FDC5F882BFD236F0029BFE8 /* FoodPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPreferencesView.swift; sourceTree = "<group>"; };
@@ -103,6 +107,11 @@
 		3FEA9B402BF21828009598CA /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		3FEA9B432BF21BF4009598CA /* FoodProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodProductViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3FA7630C2E0EB0AE00DDA290 /* Cards */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cards; sourceTree = "<group>"; };
+		3FA7630F2E0EB13500DDA290 /* Chips */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Chips; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3F48F05D2BF0B2090007EC25 /* Frameworks */ = {
@@ -207,6 +216,7 @@
 		3FDC5F812BFBB32B0029BFE8 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3FA763312E0EB55400DDA290 /* Product+NutritionHelpers.swift */,
 				3FDC5F822BFBB3400029BFE8 /* Scanner.swift */,
 			);
 			path = Utils;
@@ -252,8 +262,11 @@
 		3FEA9B252BF1408C009598CA /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				3FA7630F2E0EB13500DDA290 /* Chips */,
+				3FA7630C2E0EB0AE00DDA290 /* Cards */,
 				3F13AADD2BF2BC4B00CB4945 /* Constants.swift */,
 				3FEA9B282BF14117009598CA /* InputView.swift */,
+				3FA763332E0EB79500DDA290 /* FlowLayout.swift */,
 				3F13AADB2BF2BA8600CB4945 /* ImageLoaderView.swift */,
 				3F9DCBD92BF4C18F00E10205 /* NovaBadgeView.swift */,
 				3F9DCBDC2BF4F40600E10205 /* NutrientView.swift */,
@@ -304,6 +317,10 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3FA7630C2E0EB0AE00DDA290 /* Cards */,
+				3FA7630F2E0EB13500DDA290 /* Chips */,
 			);
 			name = Vitally;
 			packageProductDependencies = (
@@ -382,6 +399,7 @@
 				3FEA9B2D2BF14488009598CA /* MainTab.swift in Sources */,
 				3FDC5F8B2BFD23BA0029BFE8 /* MatchPercentageView.swift in Sources */,
 				3FEA9B442BF21BF4009598CA /* FoodProductViewModel.swift in Sources */,
+				3FA763342E0EB79500DDA290 /* FlowLayout.swift in Sources */,
 				3FDC5F852BFD22B20029BFE8 /* FoodPreference.swift in Sources */,
 				3F88DFA82E0DAB5300949AE5 /* UserPreference.swift in Sources */,
 				3FDC5F832BFBB3400029BFE8 /* Scanner.swift in Sources */,
@@ -404,6 +422,7 @@
 				3FDC5FA02C04E2810029BFE8 /* SearchProductDetailsView.swift in Sources */,
 				3F13AADC2BF2BA8600CB4945 /* ImageLoaderView.swift in Sources */,
 				3F9DCBE42BF56E1700E10205 /* SearchViewModel.swift in Sources */,
+				3FA763322E0EB55400DDA290 /* Product+NutritionHelpers.swift in Sources */,
 				3F710F7F2BF66B71005E689C /* Onboarding1View.swift in Sources */,
 				3FEA9B3F2BF21387009598CA /* Product.swift in Sources */,
 				3FDC5F892BFD236F0029BFE8 /* FoodPreferencesView.swift in Sources */,

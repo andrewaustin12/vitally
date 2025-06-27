@@ -179,7 +179,6 @@ struct ScannerView: View {
         }) {
             if let product = viewModel.product {
                 ProductDetailsView(product: product)
-                    .presentationDetents([.fraction(0.30), .large])
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(20)
             } else {
@@ -204,7 +203,7 @@ struct ScannerView: View {
                     viewModel.resetProduct()
                 }
             }
-            // .presentationDetents([.medium, .large])
+            .presentationDetents([.medium, .large])
         }
     }
     
