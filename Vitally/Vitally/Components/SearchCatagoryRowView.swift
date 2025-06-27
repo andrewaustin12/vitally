@@ -1,5 +1,3 @@
-
-
 import SwiftUI
 
 struct SearchCatagoryRowView: View {
@@ -30,9 +28,9 @@ struct SearchCatagoryRowView: View {
     let mockProduct = Product.mockProduct
     return SearchCatagoryRowView(
         imageName: mockProduct.imageURL,
-        imageSize: 50,
-        productName: mockProduct.productName,
-        brands: mockProduct.brands,
-        nutritionGrades: mockProduct.nutritionGrades
+        imageSize: 60,
+        productName: mockProduct.displayName,
+        brands: mockProduct.displayBrands,
+        nutritionGrades: mockProduct.displayNutritionGrades
     )
 }

@@ -1,78 +1,82 @@
 import SwiftUI
+import SwiftData
 
 struct HistoryView: View {
-    @EnvironmentObject var historyViewModel: HistoryViewModel
+    @Query(sort: \UserHistory.timestamp, order: .reverse) private var history: [UserHistory]
+    @Environment(\.modelContext) private var modelContext
+    @StateObject private var foodProductVM = FoodProductViewModel()
     var imageSize: CGFloat = 65
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(uniqueProducts, id: \.code) { product in
-                    NavigationLink(destination: ProductDetailsView(product: product)) {
-                        HStack {
-                            ImageLoaderView(urlString: product.imageURL)
-                                .frame(width: imageSize, height: imageSize)
-                                .cornerRadius(8)
-                            VStack(alignment: .leading) {
-                                Text(product.productName)
-                                    .font(.headline)
-                                Text(product.brands)
-                                    .font(.subheadline)
-                                FoodScorePreviewView(percentage: calculateMatchScore(for: product), description: "Match with your food preferences")
-//                                Text("Nutri-Score: \(product.nutritionGrades.capitalized)")
-//                                    .font(.callout)
+            VStack {
+                // Debug info
+                Text("Debug: Found \(history.count) history items")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .padding()
+                
+                // Test button
+                Button("Add Test History Item") {
+                    addTestHistoryItem()
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                
+                List {
+                    ForEach(history, id: \.id) { historyItem in
+                        NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(historyItem))) {
+                            HStack {
+                                ImageLoaderView(urlString: historyItem.imageURL)
+                                    .frame(width: imageSize, height: imageSize)
+                                    .cornerRadius(8)
+                                VStack(alignment: .leading) {
+                                    Text(historyItem.productName)
+                                        .font(.headline)
+                                    Text(historyItem.productBrand)
+                                        .font(.subheadline)
+                                    FoodScorePreviewView(percentage: calculateMatchScore(for: historyItem), description: "Match with your food preferences")
+                                }
                             }
                         }
                     }
+                    .onDelete(perform: deleteHistoryItem)
                 }
-                .onDelete(perform: deleteProduct)
+                .listStyle(.plain)
+                .navigationTitle("History")
             }
-            .listStyle(.plain)
-            .navigationTitle("History")
-            .onAppear {
-                historyViewModel.fetchProducts()
+        }
+        .onAppear {
+            print("🔍 HistoryView appeared with \(history.count) items")
+            for (index, item) in history.enumerated() {
+                print("📦 History item \(index): \(item.productName) - \(item.barcode) - \(item.timestamp)")
             }
         }
     }
 
-    private var uniqueProducts: [Product] {
-        var seenCodes = Set<String>()
-        var uniqueProducts = [Product]()
-        
-        for product in historyViewModel.products.sorted(by: { $0.timestamp ?? Date() > $1.timestamp ?? Date() }) {
-            if !seenCodes.contains(product.code) {
-                seenCodes.insert(product.code)
-                uniqueProducts.append(product)
-            }
-        }
-        
-        return uniqueProducts
-    }
-
-    private func deleteProduct(at offsets: IndexSet) {
+    private func deleteHistoryItem(at offsets: IndexSet) {
         offsets.forEach { index in
-            let product = uniqueProducts[index]
-            historyViewModel.deleteProduct(product)
+            let item = history[index]
+            modelContext.delete(item)
         }
     }
+    
+    private func createProductFromHistory(_ historyItem: UserHistory) -> Product {
+        // Use the FoodProductViewModel to create a complete product from history data
+        return foodProductVM.createProductFromHistory(historyItem)
+    }
 
-    private func calculateMatchScore(for product: Product) -> Int {
+    private func calculateMatchScore(for historyItem: UserHistory) -> Int {
         var totalScore = 0
         
         // Nutritional Quality - 60%
-        if let nutriScore = product.nutriscoreData?.grade {
-            totalScore += calculateNutriScoreGrade(nutriScore) * 60 / 100
-        }
+        totalScore += calculateNutriScoreGrade(historyItem.nutritionGrade) * 60 / 100
         
-        // Food Processing (NOVA) - 30%
-        if let novaGroup = product.nutriments.novaGroup {
-            totalScore += calculateNovaScore(Int(novaGroup)) * 30 / 100
-        }
-        
-        // Environmental Impact (Eco-Score) - 10%
-        if let ecoScore = product.ecoscoreGrade {
-            totalScore += calculateEcoScore(ecoScore) * 10 / 100
-        }
+        // For now, we'll use a default score since we don't have full product data
+        // In a real implementation, you might want to store more data in UserHistory
+        totalScore += 50 * 40 / 100 // Default score for other factors
         
         return totalScore
     }
@@ -125,10 +129,23 @@ struct HistoryView: View {
             return 0
         }
     }
+
+    private func addTestHistoryItem() {
+        print("🧪 Adding test history item...")
+        let testProduct = Product.mockProduct
+        let testHistory = UserHistory(product: testProduct)
+        
+        modelContext.insert(testHistory)
+        
+        do {
+            try modelContext.save()
+            print("✅ Test history item saved successfully")
+        } catch {
+            print("❌ Error saving test history: \(error)")
+        }
+    }
 }
 
 #Preview {
     HistoryView()
-        .environmentObject(AuthViewModel())
-        .environmentObject(HistoryViewModel())
 }

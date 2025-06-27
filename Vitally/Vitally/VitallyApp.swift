@@ -1,5 +1,6 @@
 import SwiftUI
 import FirebaseCore
+import SwiftData
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -12,34 +13,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct VitallyApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var authVM = AuthViewModel()
-    @StateObject var historyVM = HistoryViewModel()
-    @StateObject var foodPreferenceVM = FoodPreferenceViewModel()
     @StateObject var foodProductVM = FoodProductViewModel()
-    @StateObject var listVM = ListViewModel()
 
     @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding: Bool = false
 
     var body: some Scene {
         WindowGroup {
             Group {
-                if authVM.userSession != nil {
+                if hasCompletedOnboarding {
                     MainTab()
-                } else if hasCompletedOnboarding {
-                    NavigationStack {
-                        RegistrationView()
-                    }
                 } else {
                     NavigationStack {
                         OnboardingTabView()
                     }
                 }
             }
-            .environmentObject(authVM)
-            .environmentObject(historyVM)
-            .environmentObject(foodPreferenceVM)
             .environmentObject(foodProductVM)
-            .environmentObject(listVM)
         }
+        .modelContainer(for: [UserHistory.self, UserList.self, UserPreference.self], isAutosaveEnabled: true)
     }
 }
