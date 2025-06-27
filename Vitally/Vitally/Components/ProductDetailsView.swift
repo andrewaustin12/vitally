@@ -16,7 +16,6 @@ struct ProductDetailsView: View {
     private let positiveIngredients: [String] = ["fiber", "proteins", "vitamins", "mineral", "omega-3", "antioxidant"]
     private let negativeIngredients: [String] = ["sugars", "salt", "saturated fat", "trans fat", "artificial", "preservative", "coloring"]
     
-    
     enum NutrientType {
         case energy, proteins, carbohydrates, fats, saturatedFat, sugars, salt, sodium, fiber, fruitsVegetablesNuts
     }
@@ -82,7 +81,8 @@ struct ProductDetailsView: View {
                     Button(action: {
                         showAddToListSheet = true
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.blue)
                     }
                 }
             }
@@ -468,9 +468,10 @@ struct ProductDetailsView: View {
         ]
         return Int((value / dailyValues[nutrient]!) * 100)
     }
-    
 }
 
-#Preview {
-    ProductDetailsView(product: Product.mockProduct)
+struct ProductDetailsView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProductDetailsView(product: Product.mockProduct)
+    }
 }

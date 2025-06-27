@@ -5,6 +5,8 @@ struct ListDetailView: View {
     @Environment(\.modelContext) private var modelContext
     var list: UserList
     var imageSize: CGFloat = 65
+    
+    @State private var showAddToListSheet = false
 
     var uniqueItems: [UserHistory] {
         var seen = Set<String>()
@@ -29,7 +31,6 @@ struct ListDetailView: View {
 
     var body: some View {
         VStack {
-            
             List {
                 Section{
                     HStack{
@@ -38,36 +39,62 @@ struct ListDetailView: View {
                         MatchPercentageView(percentage: Int(averageMatchScore), description: "Match with your food preferences")
                     }
                 } 
-                ForEach(uniqueItems, id: \.id) { item in
-                    NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(item))) {
-                        HStack {
-                            ImageLoaderView(urlString: item.imageURL)
-                                .frame(width: imageSize, height: imageSize)
-                                .cornerRadius(8)
-                            VStack(alignment: .leading) {
-                                Text(item.productName)
-                                    .font(.headline)
-                                Text(item.productBrand)
-                                    .font(.subheadline)
-                                Text("Nutri-Score: \(item.nutritionGrade.capitalized)")
-                                    .font(.callout)
+                
+                if uniqueItems.isEmpty {
+                    Section {
+                        VStack(spacing: 16) {
+                            Image(systemName: "list.bullet.rectangle")
+                                .font(.system(size: 50))
+                                .foregroundColor(.gray)
+                            
+                            Text("No Items Yet")
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            
+                            Text("Add products to this list to get started")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 20)
+                    }
+                } else {
+                    ForEach(uniqueItems, id: \.id) { item in
+                        NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(item))) {
+                            HStack {
+                                ImageLoaderView(urlString: item.imageURL)
+                                    .frame(width: imageSize, height: imageSize)
+                                    .cornerRadius(8)
+                                VStack(alignment: .leading) {
+                                    Text(item.productName)
+                                        .font(.headline)
+                                    Text(item.productBrand)
+                                        .font(.subheadline)
+                                    Text("Nutri-Score: \(item.nutritionGrade.capitalized)")
+                                        .font(.callout)
+                                }
                             }
                         }
                     }
-                }
-                .onDelete { indexSet in
-                    removeItems(at: indexSet)
+                    .onDelete { indexSet in
+                        removeItems(at: indexSet)
+                    }
                 }
             }
             .navigationTitle(list.name)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        // Action to add item
+                        showAddToListSheet = true
                     }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.blue)
                     }
                 }
+            }
+            .sheet(isPresented: $showAddToListSheet) {
+                AddToListView(list: list, isPresented: $showAddToListSheet)
             }
         }
     }
@@ -86,65 +113,104 @@ struct ListDetailView: View {
             code: historyItem.barcode,
             imageURL: historyItem.imageURL,
             nutriments: Nutriments(
-                carbohydrates: nil,
-                carbohydrates100G: nil,
+                carbohydrates: historyItem.carbohydrates,
+                carbohydrates100G: historyItem.carbohydrates100G,
                 carbohydratesUnit: nil,
-                carbohydratesValue: nil,
-                energy: nil,
-                energyKcal: nil,
-                energyKcal100G: nil,
+                carbohydratesValue: historyItem.carbohydrates,
+                energy: historyItem.energyKcal,
+                energyKcal: historyItem.energyKcal,
+                energyKcal100G: historyItem.energyKcal100G,
                 energyKcalUnit: nil,
-                energyKcalValue: nil,
-                energyKcalValueComputed: nil,
-                energy100G: nil,
+                energyKcalValue: historyItem.energyKcal,
+                energyKcalValueComputed: historyItem.energyKcal,
+                energy100G: historyItem.energyKcal100G,
                 energyUnit: nil,
-                energyValue: nil,
-                fat: nil,
-                fat100G: nil,
+                energyValue: historyItem.energyKcal,
+                fat: historyItem.fat,
+                fat100G: historyItem.fat100G,
                 fatUnit: nil,
-                fatValue: nil,
+                fatValue: historyItem.fat,
                 fruitsVegetablesLegumesEstimateFromIngredients100G: nil,
                 fruitsVegetablesLegumesEstimateFromIngredientsServing: nil,
                 fruitsVegetablesNutsEstimateFromIngredients100G: nil,
                 fruitsVegetablesNutsEstimateFromIngredientsServing: nil,
-                novaGroup: nil,
-                novaGroup100G: nil,
-                novaGroupServing: nil,
+                novaGroup: historyItem.novaGroup,
+                novaGroup100G: historyItem.novaGroup,
+                novaGroupServing: historyItem.novaGroup,
                 nutritionScoreFr: nil,
                 nutritionScoreFr100G: nil,
-                proteins: nil,
-                proteins100G: nil,
+                proteins: historyItem.proteins,
+                proteins100G: historyItem.proteins100G,
                 proteinsUnit: nil,
-                proteinsValue: nil,
-                salt: nil,
-                salt100G: nil,
+                proteinsValue: historyItem.proteins,
+                salt: historyItem.salt,
+                salt100G: historyItem.salt100G,
                 saltUnit: nil,
-                saltValue: nil,
-                saturatedFat: nil,
-                saturatedFat100G: nil,
+                saltValue: historyItem.salt,
+                saturatedFat: historyItem.saturatedFat,
+                saturatedFat100G: historyItem.saturatedFat100G,
                 saturatedFatUnit: nil,
-                saturatedFatValue: nil,
-                sodium: nil,
-                sodium100G: nil,
+                saturatedFatValue: historyItem.saturatedFat,
+                sodium: historyItem.sodium,
+                sodium100G: historyItem.sodium100G,
                 sodiumUnit: nil,
-                sodiumValue: nil,
-                sugars: nil,
-                sugars100G: nil,
+                sodiumValue: historyItem.sodium,
+                sugars: historyItem.sugars,
+                sugars100G: historyItem.sugars100G,
                 sugarsUnit: nil,
-                sugarsValue: nil
+                sugarsValue: historyItem.sugars
             ),
-            nutriscoreData: nil,
-            ecoscoreGrade: nil,
-            ecoscoreScore: nil,
-            allergens: nil,
-            ingredients: nil,
-            labels: nil,
+            nutriscoreData: createNutriscoreData(from: historyItem),
+            ecoscoreGrade: historyItem.ecoscoreGrade,
+            ecoscoreScore: historyItem.ecoscoreScore,
+            allergens: historyItem.allergens,
+            ingredients: historyItem.ingredients,
+            labels: historyItem.labels,
             nutritionGrades: historyItem.nutritionGrade,
             productName: historyItem.productName,
             brands: historyItem.productBrand,
-            additives: nil,
-            vitamins: nil,
+            additives: historyItem.additives,
+            vitamins: historyItem.vitamins,
             timestamp: historyItem.timestamp
+        )
+    }
+    
+    private func createNutriscoreData(from historyItem: UserHistory) -> NutriscoreData? {
+        guard let grade = historyItem.nutriscoreGrade,
+              let score = historyItem.nutriscoreScore else {
+            return nil
+        }
+        
+        return NutriscoreData(
+            energy: historyItem.nutriscoreEnergy ?? 0,
+            energyPoints: historyItem.nutriscoreEnergyPoints ?? 0,
+            energyValue: historyItem.nutriscoreEnergy ?? 0,
+            fiber: historyItem.nutriscoreFiber ?? 0,
+            fiberPoints: historyItem.nutriscoreFiberPoints ?? 0,
+            fiberValue: historyItem.nutriscoreFiber ?? 0,
+            fruitsVegetablesNutsColzaWalnutOliveOils: historyItem.nutriscoreFruitsVegetablesNuts ?? 0,
+            fruitsVegetablesNutsColzaWalnutOliveOilsPoints: historyItem.nutriscoreFruitsVegetablesNutsPoints ?? 0,
+            fruitsVegetablesNutsColzaWalnutOliveOilsValue: historyItem.nutriscoreFruitsVegetablesNuts ?? 0,
+            grade: grade,
+            isBeverage: 0,
+            isCheese: 0,
+            isFat: 0,
+            isWater: 0,
+            negativePoints: historyItem.nutriscoreNegativePoints ?? 0,
+            positivePoints: historyItem.nutriscorePositivePoints ?? 0,
+            proteins: historyItem.nutriscoreProteins ?? 0,
+            proteinsPoints: historyItem.nutriscoreProteinsPoints ?? 0,
+            proteinsValue: historyItem.nutriscoreProteins ?? 0,
+            saturatedFat: historyItem.nutriscoreSaturatedFat ?? 0,
+            saturatedFatPoints: historyItem.nutriscoreSaturatedFatPoints ?? 0,
+            saturatedFatValue: historyItem.nutriscoreSaturatedFat ?? 0,
+            score: score,
+            sodium: historyItem.nutriscoreSodium ?? 0,
+            sodiumPoints: historyItem.nutriscoreSodiumPoints ?? 0,
+            sodiumValue: historyItem.nutriscoreSodium ?? 0,
+            sugars: historyItem.nutriscoreSugars ?? 0,
+            sugarsPoints: historyItem.nutriscoreSugarsPoints ?? 0,
+            sugarsValue: historyItem.nutriscoreSugars ?? 0
         )
     }
 
@@ -206,6 +272,31 @@ struct ListDetailView: View {
             return 20
         default:
             return 0
+        }
+    }
+}
+
+struct AddToListView: View {
+    let list: UserList
+    @Binding var isPresented: Bool
+    @State private var searchText = ""
+    @StateObject private var searchViewModel = SearchViewModel()
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                SearchView()
+                    .environmentObject(searchViewModel)
+            }
+            .navigationTitle("Add to \(list.name)")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                }
+            }
         }
     }
 }

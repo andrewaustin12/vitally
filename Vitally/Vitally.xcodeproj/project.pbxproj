@@ -27,6 +27,7 @@
 		3F9DCBE22BF56C3600E10205 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE12BF56C3600E10205 /* SearchView.swift */; };
 		3F9DCBE42BF56E1700E10205 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */; };
 		3F9DCBE62BF56EC000E10205 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F9DCBE52BF56EC000E10205 /* Search.swift */; };
+		3FA7630B2E0E9EBB00DDA290 /* ListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA7630A2E0E9EBB00DDA290 /* ListRowView.swift */; };
 		3FDC5F832BFBB3400029BFE8 /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F822BFBB3400029BFE8 /* Scanner.swift */; };
 		3FDC5F852BFD22B20029BFE8 /* FoodPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F842BFD22B20029BFE8 /* FoodPreference.swift */; };
 		3FDC5F892BFD236F0029BFE8 /* FoodPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FDC5F882BFD236F0029BFE8 /* FoodPreferencesView.swift */; };
@@ -77,6 +78,7 @@
 		3F9DCBE12BF56C3600E10205 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		3F9DCBE32BF56E1700E10205 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		3F9DCBE52BF56EC000E10205 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		3FA7630A2E0E9EBB00DDA290 /* ListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowView.swift; sourceTree = "<group>"; };
 		3FDC5F822BFBB3400029BFE8 /* Scanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 		3FDC5F842BFD22B20029BFE8 /* FoodPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPreference.swift; sourceTree = "<group>"; };
 		3FDC5F882BFD236F0029BFE8 /* FoodPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPreferencesView.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				3FDC5F8D2BFDD0F90029BFE8 /* ListsView.swift */,
+				3FA7630A2E0E9EBB00DDA290 /* ListRowView.swift */,
 				3FDC5F932BFDD4DD0029BFE8 /* NewListView.swift */,
 				3FDC5F952BFDF7310029BFE8 /* ListDetailView.swift */,
 				3FDC5F972BFDFFAF0029BFE8 /* ListSelectionView.swift */,
@@ -395,6 +398,7 @@
 				3F88DFAA2E0DAB5A00949AE5 /* UserList.swift in Sources */,
 				3FEA9B392BF2089D009598CA /* ScannerView.swift in Sources */,
 				3F9DCBDD2BF4F40600E10205 /* NutrientView.swift in Sources */,
+				3FA7630B2E0E9EBB00DDA290 /* ListRowView.swift in Sources */,
 				3F9DCBDA2BF4C18F00E10205 /* NovaBadgeView.swift in Sources */,
 				3FEA9B332BF14B22009598CA /* SettingsView.swift in Sources */,
 				3FDC5FA02C04E2810029BFE8 /* SearchProductDetailsView.swift in Sources */,

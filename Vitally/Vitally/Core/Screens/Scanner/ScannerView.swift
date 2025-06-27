@@ -204,7 +204,7 @@ struct ScannerView: View {
                     viewModel.resetProduct()
                 }
             }
-            .presentationDetents([.medium, .large])
+            // .presentationDetents([.medium, .large])
         }
     }
     
@@ -283,6 +283,8 @@ struct ScannerView: View {
             if let product = viewModel.product {
                 print("✅ Product found: \(product.displayName)")
                 addToHistory(product)
+                
+                // Show quick add sheet instead of full details
                 showDetailsSheet = true
             } else {
                 print("❌ No product found for barcode: \(code)")
