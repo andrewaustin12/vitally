@@ -70,7 +70,10 @@ class FoodProductViewModel: ObservableObject {
             "allergens",
             "labels_tags",
             "ingredients_text",
-            "additives_tags"
+            "ingredients_tags",
+            "ingredients_analysis_tags",
+            "additives_tags",
+            "vitamins_tags"
         ].joined(separator: ",")
         
         let endpoint = "https://world.openfoodfacts.org/api/v2/product/\(barcode)?fields=\(fields)"
@@ -228,6 +231,8 @@ class FoodProductViewModel: ObservableObject {
             ecoscoreScore: history.ecoscoreScore,
             allergens: history.allergens,
             ingredients: history.ingredients,
+            ingredientsTags: nil,
+            ingredientsAnalysisTags: nil,
             labels: history.labels,
             nutritionGrades: history.nutritionGrade,
             productName: history.productName,

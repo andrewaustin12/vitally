@@ -103,20 +103,31 @@ func formattedAllergensArray(_ allergens: String) -> [String] {
         .map { $0.replacingOccurrences(of: "en:", with: "").capitalized.trimmingCharacters(in: .whitespaces) }
 }
 
+func formatIngredientsTags(_ ingredientsTags: [String]) -> [String] {
+    return ingredientsTags
+        .map { $0.replacingOccurrences(of: "en:", with: "") }
+        .map { $0.replacingOccurrences(of: "-", with: " ") }
+        .map { $0.capitalized }
+        .filter { !$0.isEmpty && $0.count > 2 }
+}
+
 func formatIngredientsArray(_ ingredients: String) -> [String] {
-    let separators = [",", ".", "(", ")", "and", "&"]
-    var ingredientsList = [ingredients]
-    for separator in separators {
-        ingredientsList = ingredientsList.flatMap { ingredient in
-            ingredient.split(separator: separator)
-                .map { $0.trimmingCharacters(in: .whitespaces) }
-                .filter { !$0.isEmpty }
-        }
-    }
+    // Clean up the ingredients string
+    let cleanedIngredients = ingredients
+        .replacingOccurrences(of: "en:", with: "")
+        .replacingOccurrences(of: "  ", with: " ")
+        .trimmingCharacters(in: .whitespaces)
+    
+    // Split by commas only - this is the standard separator for ingredients
+    let ingredientsList = cleanedIngredients
+        .split(separator: ",")
+        .map { $0.trimmingCharacters(in: .whitespaces) }
+        .filter { !$0.isEmpty }
+    
+    // Clean up and return results
     return ingredientsList
-        .map { $0.replacingOccurrences(of: "en:", with: "").capitalized }
-        .filter { $0.count > 2 }
-        .prefix(8)
+        .map { $0.capitalized }
+        .filter { $0.count > 2 } // Filter out very short strings
         .map { $0 }
 }
 

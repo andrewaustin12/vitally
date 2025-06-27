@@ -26,6 +26,8 @@ struct Product: Codable, Identifiable, Equatable {
     let ecoscoreScore: Int?
     let allergens: String?
     let ingredients: String? // Add ingredients
+    let ingredientsTags: [String]? // Add structured ingredients
+    let ingredientsAnalysisTags: [String]? // Add ingredient analysis
     let labels: [String]? // Add labels
     let nutritionGrades: String?
     let productName: String?
@@ -60,6 +62,8 @@ struct Product: Codable, Identifiable, Equatable {
         case ecoscoreScore = "ecoscore_score"
         case allergens = "allergens"
         case ingredients = "ingredients_text" // Match the API response key
+        case ingredientsTags = "ingredients_tags"
+        case ingredientsAnalysisTags = "ingredients_analysis_tags"
         case labels = "labels_tags" // Match the API response key
         case nutritionGrades = "nutrition_grades"
         case productName = "product_name"
@@ -156,6 +160,8 @@ struct Product: Codable, Identifiable, Equatable {
             ecoscoreScore: 33,
             allergens: "fish, shells",
             ingredients: "sugar, palm oil, hazelnuts, skimmed milk powder, fat reduced cocoa, emulsifier, vanillin",
+            ingredientsTags: ["sugar", "palm oil", "hazelnuts", "skimmed milk powder", "fat reduced cocoa", "emulsifier", "vanillin"],
+            ingredientsAnalysisTags: [],
             labels: [],
             nutritionGrades: "e",
             productName: "Nutella",

@@ -9,7 +9,7 @@ struct ProductDetailsView: View {
     
     @State private var isProductScoresExpanded = true
     @State private var isNutritionalInfoExpanded = true
-    @State private var isIngredientsExpanded = false
+    @State private var isIngredientsExpanded = true
     @State private var isPositivesExpanded = true
     @State private var isNegativesExpanded = true
     @State private var showAddToListSheet = false
@@ -251,7 +251,17 @@ struct ProductDetailsView: View {
     
     
     private var ingredientsSection: some View {
-        if let ingredients = product.ingredients, !ingredients.isEmpty {
+        if let ingredientsTags = product.ingredientsTags, !ingredientsTags.isEmpty {
+            AnyView(
+                VStack(alignment: .leading, spacing: 12) {
+                    FlowLayout(spacing: 8) {
+                        ForEach(formatIngredientsTags(ingredientsTags), id: \.self) { ingredient in
+                            IngredientChip(ingredient: ingredient)
+                        }
+                    }
+                }
+            )
+        } else if let ingredients = product.ingredients, !ingredients.isEmpty {
             AnyView(
                 VStack(alignment: .leading, spacing: 12) {
                     FlowLayout(spacing: 8) {
@@ -358,10 +368,7 @@ struct ProductDetailsView: View {
     
     private func dietaryLabelsSection(labels: [String]) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 8) {
+            FlowLayout(spacing: 8) {
                 ForEach(formatLabels(labels), id: \.self) { label in
                     DietaryLabelChip(label: label)
                 }
@@ -383,24 +390,31 @@ struct ProductDetailsView: View {
     }
     
     func formatIngredientsArray(_ ingredients: String) -> [String] {
-        // Split by common separators and clean up
-        let separators = [",", ".", "(", ")", "and", "&"]
-        var ingredientsList = [ingredients]
+        // Clean up the ingredients string
+        let cleanedIngredients = ingredients
+            .replacingOccurrences(of: "en:", with: "")
+            .replacingOccurrences(of: "  ", with: " ")
+            .trimmingCharacters(in: .whitespaces)
         
-        for separator in separators {
-            ingredientsList = ingredientsList.flatMap { ingredient in
-                ingredient.split(separator: separator)
-                    .map { $0.trimmingCharacters(in: .whitespaces) }
-                    .filter { !$0.isEmpty }
-            }
-        }
+        // Split by commas only - this is the standard separator for ingredients
+        let ingredientsList = cleanedIngredients
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
         
-        // Clean up and limit to first 8 ingredients for display
+        // Clean up and return results
         return ingredientsList
-            .map { $0.replacingOccurrences(of: "en:", with: "").capitalized }
+            .map { $0.capitalized }
             .filter { $0.count > 2 } // Filter out very short strings
-            .prefix(8)
             .map { $0 }
+    }
+    
+    func formatIngredientsTags(_ ingredientsTags: [String]) -> [String] {
+        return ingredientsTags
+            .map { $0.replacingOccurrences(of: "en:", with: "") }
+            .map { $0.replacingOccurrences(of: "-", with: " ") }
+            .map { $0.capitalized }
+            .filter { !$0.isEmpty && $0.count > 2 }
     }
     
     private func calculateMatchScore() {
