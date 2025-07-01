@@ -242,4 +242,77 @@ class FoodProductViewModel: ObservableObject {
             timestamp: history.timestamp
         )
     }
+    
+    func createProductFromListProduct(_ listProduct: ListProduct) -> Product {
+        // Reconstruct Nutriments from ListProduct data
+        let nutriments = Nutriments(
+            carbohydrates: listProduct.carbohydrates,
+            carbohydrates100G: listProduct.carbohydrates100G,
+            carbohydratesUnit: "g",
+            carbohydratesValue: listProduct.carbohydrates,
+            energy: listProduct.energyKcal,
+            energyKcal: listProduct.energyKcal,
+            energyKcal100G: listProduct.energyKcal100G,
+            energyKcalUnit: "kcal",
+            energyKcalValue: listProduct.energyKcal,
+            energyKcalValueComputed: listProduct.energyKcal,
+            energy100G: listProduct.energyKcal100G,
+            energyUnit: "kcal",
+            energyValue: listProduct.energyKcal,
+            fat: listProduct.fat,
+            fat100G: listProduct.fat100G,
+            fatUnit: "g",
+            fatValue: listProduct.fat,
+            fruitsVegetablesLegumesEstimateFromIngredients100G: nil,
+            fruitsVegetablesLegumesEstimateFromIngredientsServing: nil,
+            fruitsVegetablesNutsEstimateFromIngredients100G: nil,
+            fruitsVegetablesNutsEstimateFromIngredientsServing: nil,
+            novaGroup: listProduct.novaGroup,
+            novaGroup100G: listProduct.novaGroup,
+            novaGroupServing: listProduct.novaGroup,
+            nutritionScoreFr: nil,
+            nutritionScoreFr100G: nil,
+            proteins: listProduct.proteins,
+            proteins100G: listProduct.proteins100G,
+            proteinsUnit: "g",
+            proteinsValue: listProduct.proteins,
+            salt: listProduct.salt,
+            salt100G: listProduct.salt100G,
+            saltUnit: "g",
+            saltValue: listProduct.salt,
+            saturatedFat: listProduct.saturatedFat,
+            saturatedFat100G: listProduct.saturatedFat100G,
+            saturatedFatUnit: "g",
+            saturatedFatValue: listProduct.saturatedFat,
+            sodium: listProduct.sodium,
+            sodium100G: listProduct.sodium100G,
+            sodiumUnit: "g",
+            sodiumValue: listProduct.sodium,
+            sugars: listProduct.sugars,
+            sugars100G: listProduct.sugars100G,
+            sugarsUnit: "g",
+            sugarsValue: listProduct.sugars
+        )
+        
+        // Create and return the complete Product object
+        return Product(
+            code: listProduct.productCode,
+            imageURL: listProduct.imageURL,
+            nutriments: nutriments,
+            nutriscoreData: nil, // ListProduct doesn't store nutriscore data
+            ecoscoreGrade: listProduct.ecoscoreGrade,
+            ecoscoreScore: listProduct.ecoscoreScore,
+            allergens: listProduct.allergens,
+            ingredients: listProduct.ingredients,
+            ingredientsTags: nil,
+            ingredientsAnalysisTags: nil,
+            labels: listProduct.labels,
+            nutritionGrades: listProduct.nutritionGrade,
+            productName: listProduct.productName,
+            brands: listProduct.productBrand,
+            additives: listProduct.additives,
+            vitamins: listProduct.vitamins,
+            timestamp: listProduct.timestamp
+        )
+    }
 }

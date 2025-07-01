@@ -9,44 +9,27 @@ struct HistoryView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                // Debug info
-                Text("Debug: Found \(history.count) history items")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .padding()
-                
-                // Test button
-                Button("Add Test History Item") {
-                    addTestHistoryItem()
-                }
-                .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-                
-                List {
-                    ForEach(history, id: \.id) { historyItem in
-                        NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(historyItem))) {
-                            HStack {
-                                ImageLoaderView(urlString: historyItem.imageURL)
-                                    .frame(width: imageSize, height: imageSize)
-                                    .cornerRadius(8)
-                                VStack(alignment: .leading) {
-                                    Text(historyItem.productName)
-                                        .font(.headline)
-                                    Text(historyItem.productBrand)
-                                        .font(.subheadline)
-                                    FoodScorePreviewView(percentage: calculateMatchScore(for: historyItem), description: "Match with your food preferences")
-                                }
+            List {
+                ForEach(history, id: \.id) { historyItem in
+                    NavigationLink(destination: ProductDetailsView(product: createProductFromHistory(historyItem))) {
+                        HStack {
+                            ImageLoaderView(urlString: historyItem.imageURL)
+                                .frame(width: imageSize, height: imageSize)
+                                .cornerRadius(8)
+                            VStack(alignment: .leading) {
+                                Text(historyItem.productName)
+                                    .font(.headline)
+                                Text(historyItem.productBrand)
+                                    .font(.subheadline)
+                                FoodScorePreviewView(percentage: calculateMatchScore(for: historyItem), description: "Match with your food preferences")
                             }
                         }
                     }
-                    .onDelete(perform: deleteHistoryItem)
                 }
-                .listStyle(.plain)
-                .navigationTitle("History")
+                .onDelete(perform: deleteHistoryItem)
             }
+            .listStyle(.plain)
+            .navigationTitle("History")
         }
         .onAppear {
             print("🔍 HistoryView appeared with \(history.count) items")
@@ -147,21 +130,6 @@ struct HistoryView: View {
             return 20
         default:
             return 0
-        }
-    }
-
-    private func addTestHistoryItem() {
-        print("🧪 Adding test history item...")
-        let testProduct = Product.mockProduct
-        let testHistory = UserHistory(product: testProduct)
-        
-        modelContext.insert(testHistory)
-        
-        do {
-            try modelContext.save()
-            print("✅ Test history item saved successfully")
-        } catch {
-            print("❌ Error saving test history: \(error)")
         }
     }
 }

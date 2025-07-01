@@ -148,9 +148,11 @@ struct CreateListView: View {
         
         // If we have a product, add it to the newly created list
         if let product = product {
-            let historyItem = UserHistory(product: product)
-            list.items.append(historyItem)
+            // Create a new ListProduct for the list (completely independent of scan history)
+            let listProduct = ListProduct(product: product)
+            list.items.append(listProduct)
             list.updateLastModified()
+            print("✅ Added item to new list: \(list.name)")
         }
         
         // Reset form

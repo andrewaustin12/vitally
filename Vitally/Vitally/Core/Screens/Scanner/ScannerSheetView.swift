@@ -186,9 +186,20 @@ struct ScannerSheetView: View {
     }
     
     private func addToQuickList(list: UserList) {
-        let historyItem = UserHistory(product: product)
-        list.items.append(historyItem)
-        list.updateLastModified()
+        // Create a new ListProduct for the list (completely independent of scan history)
+        let listProduct = ListProduct(product: product)
+        
+        // Check if item with same barcode is already in this list
+        let existingInList = list.items.first { $0.productCode == product.code }
+        
+        if existingInList == nil {
+            // Item not in list, add it
+            list.items.append(listProduct)
+            list.updateLastModified()
+            print("✅ Added new item to list: \(list.name)")
+        } else {
+            print("⚠️ Item already exists in list: \(list.name)")
+        }
         
         addedToListName = list.name
         showSuccessAlert = true

@@ -9,9 +9,9 @@ struct ListDetailView: View {
     
     @State private var showAddToListSheet = false
 
-    var uniqueItems: [UserHistory] {
+    var uniqueItems: [ListProduct] {
         var seen = Set<String>()
-        var uniqueItems = [UserHistory]()
+        var uniqueItems = [ListProduct]()
         
         for item in list.items {
             if !seen.contains(item.id) {
@@ -93,7 +93,7 @@ struct ListDetailView: View {
                     }
                 } else {
                     ForEach(uniqueItems, id: \.id) { item in
-                        NavigationLink(destination: ProductDetailsView(product: foodProductVM.createProductFromHistory(item))) {
+                        NavigationLink(destination: ProductDetailsView(product: foodProductVM.createProductFromListProduct(item))) {
                             HStack {
                                 ImageLoaderView(urlString: item.imageURL)
                                     .frame(width: imageSize, height: imageSize)
@@ -140,7 +140,7 @@ struct ListDetailView: View {
         }
     }
 
-    private func calculateMatchScore(for item: UserHistory) -> Int {
+    private func calculateMatchScore(for item: ListProduct) -> Int {
         var totalScore = 0
         var weightSum = 0
         
@@ -171,7 +171,7 @@ struct ListDetailView: View {
         return weightSum > 0 ? totalScore / weightSum : 0
     }
     
-    private func calculateAllergenScore(for item: UserHistory) -> Int {
+    private func calculateAllergenScore(for item: ListProduct) -> Int {
         // This would be enhanced based on user's allergen preferences
         // For now, return a neutral score
         return 50
@@ -341,28 +341,28 @@ struct ListDetailView_Previews: PreviewProvider {
         
         // Sample items with different scores
         let sampleItems = [
-            createSampleHistoryItem(
+            createSampleListProduct(
                 name: "Organic Bananas",
                 brand: "Fresh Market",
                 nutritionGrade: "A",
                 novaGroup: 1,
                 ecoscoreGrade: "A"
             ),
-            createSampleHistoryItem(
+            createSampleListProduct(
                 name: "Greek Yogurt",
                 brand: "Chobani",
                 nutritionGrade: "B",
                 novaGroup: 2,
                 ecoscoreGrade: "B"
             ),
-            createSampleHistoryItem(
+            createSampleListProduct(
                 name: "Whole Grain Bread",
                 brand: "Nature's Own",
                 nutritionGrade: "B",
                 novaGroup: 3,
                 ecoscoreGrade: "C"
             ),
-            createSampleHistoryItem(
+            createSampleListProduct(
                 name: "Dark Chocolate",
                 brand: "Lindt",
                 nutritionGrade: "C",
@@ -375,14 +375,14 @@ struct ListDetailView_Previews: PreviewProvider {
         return list
     }
     
-    static func createSampleHistoryItem(name: String, brand: String, nutritionGrade: String, novaGroup: Int, ecoscoreGrade: String) -> UserHistory {
-        let history = UserHistory(product: Product.mockProduct)
-        history.id = UUID().uuidString // Ensure unique ID
-        history.productName = name
-        history.productBrand = brand
-        history.nutritionGrade = nutritionGrade
-        history.novaGroup = Double(novaGroup)
-        history.ecoscoreGrade = ecoscoreGrade
-        return history
+    static func createSampleListProduct(name: String, brand: String, nutritionGrade: String, novaGroup: Int, ecoscoreGrade: String) -> ListProduct {
+        let listProduct = ListProduct(product: Product.mockProduct)
+        listProduct.id = UUID().uuidString // Ensure unique ID
+        listProduct.productName = name
+        listProduct.productBrand = brand
+        listProduct.nutritionGrade = nutritionGrade
+        listProduct.novaGroup = Double(novaGroup)
+        listProduct.ecoscoreGrade = ecoscoreGrade
+        return listProduct
     }
 }
